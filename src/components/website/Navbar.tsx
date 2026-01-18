@@ -1,6 +1,12 @@
 import { Link, useNavigate } from "react-router-dom";
 import { getAsync } from "../../services/apiService";
 import { getFromCookie, removeFromCookie } from "../../services/cookieService";
+import NavbarBoot from "react-bootstrap/Navbar";
+import Form from "react-bootstrap/Form";
+import Button from "react-bootstrap/Button";
+import InputGroup from "react-bootstrap/InputGroup";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
 
 export default function Navbar() {
   const navigate = useNavigate();
@@ -21,21 +27,18 @@ export default function Navbar() {
   }
 
   return (
-    <div className=" bg-purple-400 text-white p-5">
-      <nav className="container mx-auto flex justify-between items-center">
-        <Link
-          to={"/home"}
-          className="text-2xl font-bold hover:text-black transition-[1s] "
-        >
-          E-Commerce
+    <NavbarBoot className="bg-primary p-3 ">
+      <div className="container flex justify-content-between align-items-center">
+        <Link to="/" className="text-black fs-3 fw-bold">
+          E-commerce
         </Link>
-        <button
-          onClick={handelLogout}
-          className="text-2xl hover:scale-110 transition"
-        >
-          Logout
-        </button>
-      </nav>
-    </div>
+
+        <Button type="submit" className="btn-info">
+          <Link to="/login" className="text-decoration-none">
+            Login
+          </Link>
+        </Button>
+      </div>
+    </NavbarBoot>
   );
 }

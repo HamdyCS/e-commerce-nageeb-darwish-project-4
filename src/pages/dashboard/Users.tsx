@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import UserDto from "../../dtos/auth/UserDto";
 import { getAsync } from "../../services/apiService";
 import { getFromCookie } from "../../services/cookieService";
-import Loading from "../../components/ui/Loading";
+import Loading from "../../components/ui/loading/Loading";
 
 export default function Users() {
   const [users, setUsers] = useState<UserDto[]>([]);

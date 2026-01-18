@@ -6,7 +6,7 @@ export default function Layout() {
   return (
     <div className="layout ">
       <Navbar />
-      <div className="p-5 container mx-auto">
+      <div className="container mx-auto">
         <Outlet />
       </div>
     </div>

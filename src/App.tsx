@@ -8,10 +8,11 @@ import Register from "./pages/website/auth/RegisterPage";
 import LoginPage from "./pages/website/auth/LoginPage";
 import Layout from "./components/website/Layout";
 import Dashboard from "./pages/dashboard/Dashboard";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 function App() {
   return (
-    <div className="App text-lg font-[lato] bg-[#0C172C]  text-white">
+    <div className="App">
       <Routes>
         <Route element={<Layout />}>
           <Route path="/" element={<HomePage />} />
