@@ -1,12 +1,8 @@
+import Button from "react-bootstrap/Button";
+import NavbarBoot from "react-bootstrap/Navbar";
 import { Link, useNavigate } from "react-router-dom";
 import { getAsync } from "../../services/apiService";
 import { getFromCookie, removeFromCookie } from "../../services/cookieService";
-import NavbarBoot from "react-bootstrap/Navbar";
-import Form from "react-bootstrap/Form";
-import Button from "react-bootstrap/Button";
-import InputGroup from "react-bootstrap/InputGroup";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
 
 export default function Navbar() {
   const navigate = useNavigate();
@@ -33,11 +29,11 @@ export default function Navbar() {
           E-commerce
         </Link>
 
-        <Button type="submit" className="btn-info">
-          <Link to="/login" className="text-decoration-none">
+        <Link to="/login" className="text-decoration-none">
+          <Button type="submit" className="btn-info">
             Login
-          </Link>
-        </Button>
+          </Button>
+        </Link>
       </div>
     </NavbarBoot>
   );

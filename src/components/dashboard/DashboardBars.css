@@ -1,0 +1,11 @@
+.side-bar-list {
+  li .link:hover {
+    background-color: #f2f3fe !important;
+    color: blue !important;
+  }
+
+  .active {
+    background-color: #f2f3fe !important;
+    color: blue !important;
+  }
+}

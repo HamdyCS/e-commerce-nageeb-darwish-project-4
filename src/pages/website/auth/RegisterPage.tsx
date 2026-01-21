@@ -89,8 +89,7 @@ export default function Register() {
       //set to true to show alert
       setRegisterDone(true);
 
-      //navigate to login page
-      navigate("/login");
+    
     } catch (error) {
       console.log(error);
     } finally {
@@ -108,7 +107,7 @@ export default function Register() {
       {loading && <Loading />}
       <Activity mode={loading ? "hidden" : "visible"}>
         <div
-          className="d-flex flex-column align-items-center lg:p-12 p-8 w-100 p-5 rounded-3 bg-white shadow-lg"
+          className="d-flex flex-column align-items-center lg:p-12 p-8 w-100 p-5 rounded-3 bg-white shadow-lg "
           style={{
             maxWidth: "500px",
           }}
