@@ -55,6 +55,7 @@ export default function LoginPage() {
       //save token in cookie
       setInCookie("BearerToken", loginResponseDto.token);
 
+      //navigate to home
       navigate("/home");
     } catch (error) {
       console.log(error);

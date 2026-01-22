@@ -10,8 +10,8 @@ import NotFound from "./pages/NotFound";
 import GoogleCallbackPage from "./pages/website/auth/GoogleCallbackPage";
 import LoginPage from "./pages/website/auth/LoginPage";
 import Register from "./pages/website/auth/RegisterPage";
-import HomePage from "./pages/website/HomePage";
 import RequireAuth from "./pages/website/auth/RequireAuth";
+import HomePage from "./pages/website/HomePage";
 
 function App() {
   const [windowSize, setWindowSize] = useAtom(windowSizeAtom);
@@ -41,6 +41,7 @@ function App() {
           <Route path="/home" element={<HomePage />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<LoginPage />} />
+
           <Route
             path="/auth/google/callback"
             element={<GoogleCallbackPage />}

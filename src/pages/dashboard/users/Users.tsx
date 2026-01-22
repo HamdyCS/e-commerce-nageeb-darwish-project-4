@@ -85,13 +85,18 @@ export default function Users() {
     }
   }
 
-  const filterUsers = users.filter((user) => user.id !== authUser.id);
   //user elements
-  const usersElements = filterUsers.map((user) => {
+  const usersElements = users.map((user) => {
+    const isAuthUser = authUser.id === user.id;
     return (
-      <tr key={user.id}>
+      <tr
+        key={user.id}
+        style={{
+          opacity: isAuthUser ? "0.5" : "1",
+        }}
+      >
         <td>{user.id}</td>
-        <td>{user.name}</td>
+        <td> {isAuthUser ? user.name + " (You)" : user.name}</td>
         <td>{user.email}</td>
         <td>{getRoleNameByRoleNumber(user.role)}</td>
         <td>{user.email_verified_at}</td>
@@ -105,13 +110,15 @@ export default function Users() {
                 <p className="p-0 m-0">Edit</p>
               </Button>
             </Link>
-            <Button
-              className="btn-danger rounded px-4 py-2 d-flex justify-content-center align-items-center gap-1"
-              onClick={() => handelDelete(user.id)}
-            >
-              <FontAwesomeIcon size="lg" icon={faTrash} />{" "}
-              <p className="p-0 m-0">Delete</p>
-            </Button>{" "}
+            {!isAuthUser && (
+              <Button
+                className="btn-danger rounded px-4 py-2 d-flex justify-content-center align-items-center gap-1"
+                onClick={() => handelDelete(user.id)}
+              >
+                <FontAwesomeIcon size="lg" icon={faTrash} />{" "}
+                <p className="p-0 m-0">Delete</p>
+              </Button>
+            )}
           </div>
         </td>
       </tr>
@@ -150,7 +157,7 @@ export default function Users() {
               </td>
             </tr>
           )}
-          {!loading && filterUsers.length === 0 && (
+          {!loading && users.length === 0 && (
             <tr>
               <td colSpan={8} className="text-center fw-bold text-secondary">
                 No users found!
