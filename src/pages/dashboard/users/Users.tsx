@@ -1,18 +1,21 @@
-import React, { useEffect, useState } from "react";
-import UserDto from "../../../dtos/auth/UserDto";
-import { deleteAsync, getAsync } from "../../../services/apiService";
-import { getFromCookie } from "../../../services/cookieService";
-import Loading from "../../../components/ui/loading/Loading";
+import {
+  faPenToSquare,
+  faPlus,
+  faTrash,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useEffect, useState } from "react";
 import { Button, Table } from "react-bootstrap";
+import { Link } from "react-router-dom";
 import {
   All_Users,
   Delete_User,
   Get_Current_User as Get_Auth_User,
 } from "../../../Apis/Apis";
-import { Link } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPenToSquare, faTrash } from "@fortawesome/free-solid-svg-icons";
 import Axios from "../../../Apis/Axios";
+import Loading from "../../../components/ui/loading/Loading";
+import { getRoleNameByRoleNumber } from "../../../dtos/auth/Role";
+import UserDto from "../../../dtos/auth/UserDto";
 
 export default function Users() {
   const [users, setUsers] = useState<UserDto[]>([]);
@@ -30,6 +33,8 @@ export default function Users() {
         );
 
         data && setUsers(data);
+
+        console.log(data);
 
         //get auth user
         const user = await Axios.get<UserDto>(`${Get_Auth_User}`).then(
@@ -88,13 +93,14 @@ export default function Users() {
         <td>{user.id}</td>
         <td>{user.name}</td>
         <td>{user.email}</td>
+        <td>{getRoleNameByRoleNumber(user.role)}</td>
         <td>{user.email_verified_at}</td>
         <td>{user.created_at}</td>
         <td>{user.updated_at}</td>
         <td>
           <div className="d-flex gap-3">
             <Link to={`/dashboard/users/${user.id}`}>
-              <Button className="btn-primary rounded px-4 py-2 d-flex justify-content-center align-items-center gap-1">
+              <Button className="btn-secondary rounded px-4 py-2 d-flex justify-content-center align-items-center gap-1">
                 <FontAwesomeIcon size="lg" icon={faPenToSquare} />
                 <p className="p-0 m-0">Edit</p>
               </Button>
@@ -114,18 +120,22 @@ export default function Users() {
 
   return (
     <div className="Users">
+      <div className="d-flex align-items-center justify-content-between mb-3">
+        <h2 className="text-dark fw-bold fs-1 mb-3 ">Users</h2>
+        <Link to="/dashboard/users/add">
+          <Button className="btn-primary rounded px-4 py-2 d-flex justify-content-center align-items-center gap-1">
+            <FontAwesomeIcon size="lg" icon={faPlus} />
+            <p className="p-0 m-0">Add</p>
+          </Button>
+        </Link>
+      </div>
       <Table striped bordered hover variant="light" responsive>
-        <caption
-          className="text-dark fw-bold fs-1 mb-3 "
-          style={{ captionSide: "top" }}
-        >
-          Users
-        </caption>
         <thead>
           <tr>
             <th>Id </th>
             <th>Name</th>
             <th>Email</th>
+            <th>Role</th>
             <th>Email verified at</th>
             <th>Created at</th>
             <th>Updated at</th>
@@ -135,14 +145,14 @@ export default function Users() {
         <tbody>
           {loading && (
             <tr>
-              <td colSpan={7}>
+              <td colSpan={8}>
                 <Loading />
               </td>
             </tr>
           )}
           {!loading && filterUsers.length === 0 && (
             <tr>
-              <td colSpan={7} className="text-center fw-bold text-secondary">
+              <td colSpan={8} className="text-center fw-bold text-secondary">
                 No users found!
               </td>
             </tr>

@@ -5,3 +5,5 @@ export const All_Users = "users";
 export const Delete_User = (id: string) => `user/${id}`;
 export const Get_User = (id: string) => `user/${id}`;
 export const Update_User = (id: string) => `user/edit/${id}`;
+export const Add_User = "user/add";
+export const Logout = "logout";

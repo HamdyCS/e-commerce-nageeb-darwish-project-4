@@ -1,15 +1,13 @@
-import React from "react";
-import { Route, Routes } from "react-router-dom";
-import Users from "./users/Users";
-import NotFound from "../NotFound";
-import DashboardTopBar from "../../components/dashboard/DashboardTopBar";
-import { Col, Row } from "react-bootstrap";
-import DashboardSidebar from "../../components/dashboard/DashboardSideBar";
 import { useAtom } from "jotai";
+import { Route, Routes } from "react-router-dom";
 import { showDashboardSidebarAtom } from "../../atoms/DashBoardAtom";
 import { windowSizeAtom } from "../../atoms/WindowAtom";
-import RequireAuth from "../website/auth/RequireAuth";
+import DashboardSidebar from "../../components/dashboard/DashboardSideBar";
+import DashboardTopBar from "../../components/dashboard/DashboardTopBar";
+import NotFound from "../NotFound";
+import AddUser from "./users/AddUser";
 import UpdateUser from "./users/UpdateUser";
+import Users from "./users/Users";
 
 export default function Dashboard() {
   const [showDashboardSidebar, setShowDashboardSidebar] = useAtom(
@@ -71,6 +69,7 @@ export default function Dashboard() {
           <Routes>
             <Route index element={<Users />} />
             <Route path="/users" element={<Users />} />
+            <Route path="/users/add" element={<AddUser />} />
             <Route path="/users/:id" element={<UpdateUser />} />
             <Route path="*" element={<NotFound />} />
           </Routes>

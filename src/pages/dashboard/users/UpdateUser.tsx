@@ -10,15 +10,16 @@ import UserDto from "../../../dtos/auth/UserDto";
 import Axios from "../../../Apis/Axios";
 import { Get_User, Update_User } from "../../../Apis/Apis";
 import Loading from "../../../components/ui/loading/Loading";
-import { Button, Form } from "react-bootstrap";
+import { Button, Dropdown, Form } from "react-bootstrap";
 import Swal from "sweetalert2";
 import UpdateUserDto from "../../../dtos/auth/UpdateUserDto";
+import { getRoleNameByRoleNumber, Role } from "../../../dtos/auth/Role";
 
 export default function UpdateUser() {
   const userId = useParams().id;
 
   const [user, setUser] = useState<UserDto>({} as UserDto);
-  const [userForm, setUserForm] = useState<UpdateUserDto>({} as UpdateUserDto);
+  const [form, setForm] = useState<UpdateUserDto>({} as UpdateUserDto);
 
   const [error, setError] = useState<string>("");
 
@@ -41,9 +42,10 @@ export default function UpdateUser() {
         data && setUser(data);
 
         //update user form info
-        setUserForm({
+        setForm({
           name: data.name,
           email: data.email,
+          role: data.role,
         });
       } catch (error) {
         console.log(error);
@@ -72,12 +74,12 @@ export default function UpdateUser() {
   //handel form change
   function handelFormChange(event: ChangeEvent<HTMLInputElement>): void {
     const newUserForm = {
-      ...userForm,
+      ...form,
       [event.target.name]: event.target.value,
     };
 
     //update user form state
-    setUserForm(newUserForm);
+    setForm(newUserForm);
   }
 
   //handel form submit
@@ -90,24 +92,30 @@ export default function UpdateUser() {
     setError("");
 
     //validition form
-    if (!userForm.name) {
+    if (!form.name) {
       setError("Name is required");
       return;
     }
-    if (!userForm.email) {
+    if (!form.email) {
       setError("Email is required");
+      return;
+    }
+
+    //validition role
+    if (!form.role) {
+      setError("Please select role");
       return;
     }
 
     setLoading(true);
 
     try {
-      console.log(userForm);
+      console.log(form);
 
       //call api
       const data = await Axios.post<UpdateUserDto>(
         `${Update_User(user.id.toString())}`,
-        userForm,
+        form,
       ).then((res) => res.data);
 
       //set to true to show alert
@@ -151,7 +159,7 @@ export default function UpdateUser() {
                 name="name"
                 placeholder="name"
                 onChange={handelFormChange}
-                value={userForm.name}
+                value={form.name}
               />
             </Form.Group>
             <Form.Group className="mb-3" controlId="formBasicEmail">
@@ -160,8 +168,29 @@ export default function UpdateUser() {
                 name="email"
                 placeholder="email"
                 onChange={handelFormChange}
-                value={userForm.email}
+                value={form.email}
               />
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="role">
+              <Form.Label>Role</Form.Label>
+              <Form.Select
+                onChange={(e) =>
+                  setForm({ ...form, role: e.target.value as Role })
+                }
+              >
+                <option disabled selected={!form.role}>
+                  Select Role
+                </option>
+                <option value="1995" selected={form.role === "1995"}>
+                  Admin
+                </option>
+                <option value="2001" selected={form.role === "2001"}>
+                  Writer
+                </option>
+                <option value="1991" selected={form.role === "1991"}>
+                  User
+                </option>
+              </Form.Select>
             </Form.Group>
 
             {error && (
