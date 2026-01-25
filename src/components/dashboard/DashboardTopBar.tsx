@@ -11,7 +11,7 @@ import { Button, Dropdown, DropdownButton } from "react-bootstrap";
 import UserDto from "../../dtos/auth/UserDto";
 import { getFromCookie, removeFromCookie } from "../../services/cookieService";
 import { getAsync } from "../../services/apiService";
-import { Get_Current_User, Logout } from "../../Apis/Apis";
+import { GET_AUTH_USER, LOGOUT } from "../../Apis/Apis";
 import Loading from "../ui/loading/Loading";
 import Axios from "../../Apis/Axios";
 
@@ -29,7 +29,7 @@ export default function DashboardNavbar() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const user = await Axios.get<UserDto>(Get_Current_User).then(
+        const user = await Axios.get<UserDto>(GET_AUTH_USER).then(
           (res) => res.data,
         );
         user && setUser(user);
@@ -45,7 +45,7 @@ export default function DashboardNavbar() {
   async function handelLogout() {
     try {
       //call api
-      const data = await Axios.get(Logout).then((res) => res.data);
+      const data = await Axios.get(LOGOUT).then((res) => res.data);
       console.log(data);
 
       //remove token from cookie

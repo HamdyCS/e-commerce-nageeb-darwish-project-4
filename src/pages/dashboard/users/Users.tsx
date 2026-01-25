@@ -8,9 +8,9 @@ import { useEffect, useState } from "react";
 import { Button, Table } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import {
-  All_Users,
-  Delete_User,
-  Get_Current_User as Get_Auth_User,
+  ALL_USERS,
+  DELETE_USER,
+  GET_AUTH_USER as GET_AUTH_USER,
 } from "../../../Apis/Apis";
 import Axios from "../../../Apis/Axios";
 import Loading from "../../../components/ui/loading/Loading";
@@ -28,7 +28,7 @@ export default function Users() {
     async function fetchData() {
       try {
         //fetch users from api
-        const data = await Axios.get<UserDto[]>(All_Users).then(
+        const data = await Axios.get<UserDto[]>(ALL_USERS).then(
           (res) => res.data,
         );
 
@@ -37,7 +37,7 @@ export default function Users() {
         console.log(data);
 
         //get auth user
-        const user = await Axios.get<UserDto>(`${Get_Auth_User}`).then(
+        const user = await Axios.get<UserDto>(`${GET_AUTH_USER}`).then(
           (res) => res.data,
         );
 
@@ -66,7 +66,7 @@ export default function Users() {
       setLoading(true);
 
       //delete user from api
-      const data = await Axios.delete(`${Delete_User(id.toString())}`).then(
+      const data = await Axios.delete(`${DELETE_USER(id.toString())}`).then(
         (res) => res.data,
       );
 

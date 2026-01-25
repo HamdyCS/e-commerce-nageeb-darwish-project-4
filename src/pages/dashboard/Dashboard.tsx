@@ -9,8 +9,9 @@ import ForbiddenPage from "../website/auth/ForbiddenPage";
 import AddUser from "./users/AddUser";
 import UpdateUser from "./users/UpdateUser";
 import Users from "./users/Users";
-import RequireCustomAuth from "./auth/RequireCustomAuth";
 import { enRole } from "../../dtos/auth/Role";
+import RequireCustomAuthDashboard from "./auth/RequireCustomAuthDashboard";
+import Categories from "./categories/Categories";
 
 export default function Dashboard() {
   const [showDashboardSidebar, setShowDashboardSidebar] = useAtom(
@@ -70,20 +71,45 @@ export default function Dashboard() {
           }}
         >
           <Routes>
-            <Route index element={<Navigate to="/dashboard/users" replace />} />
-            <Route element={<RequireCustomAuth roles={[enRole.admin]} />}>
+            <Route
+              index
+              element={<h1 className="text-center">Welcome back😍</h1>}
+            />
+            {/* Admin */}
+            <Route
+              element={<RequireCustomAuthDashboard roles={[enRole.admin]} />}
+            >
               <Route path="/users" element={<Users />} />
               <Route path="/users/add" element={<AddUser />} />
               <Route path="/users/:id" element={<UpdateUser />} />
             </Route>
+
+            {/* Writer and admin */}
             <Route
               element={
-                <RequireCustomAuth roles={[enRole.admin, enRole.user]} />
+                <RequireCustomAuthDashboard
+                  roles={[enRole.admin, enRole.writer]}
+                />
               }
             >
-              <Route path="/to-user" element={<h1>To user</h1>} />
+              <Route
+                path="/posts"
+                element={<h2 className="text-center">Posts</h2>}
+              />
             </Route>
+            {/* Product manager and admin */}
+            <Route
+              element={
+                <RequireCustomAuthDashboard
+                  roles={[enRole.admin, enRole.productManager]}
+                />
+              }
+            >
+              <Route path="/categories" element={<Categories />} />
+            </Route>
+
             <Route path="/403" element={<ForbiddenPage />} />
+            <Route path="/404" element={<NotFound />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </div>

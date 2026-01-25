@@ -4,10 +4,11 @@ import { postAsync } from "../../../services/apiService";
 import Loading from "../../../components/ui/loading/Loading";
 import LoginDto from "../../../dtos/auth/LoginDto";
 import LoginResponseDto from "../../../dtos/auth/LoginResponseDto";
-import { setInCookie } from "../../../services/cookieService";
+import { getFromCookie, setInCookie } from "../../../services/cookieService";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 import { Button, Form } from "react-bootstrap";
+import { enRole } from "../../../dtos/auth/Role";
 
 export default function LoginPage() {
   const [form, setForm] = useState<LoginDto>({} as LoginDto);
@@ -24,7 +25,7 @@ export default function LoginPage() {
     setForm(newForm);
   }
 
-  //handel form submit
+  //handel login
   async function handleSubmit(e: FormEvent<HTMLFormElement>): Promise<void> {
     e.preventDefault();
 
@@ -55,8 +56,23 @@ export default function LoginPage() {
       //save token in cookie
       setInCookie("BearerToken", loginResponseDto.token);
 
-      //navigate to home
-      navigate("/home");
+      //navigate to route by role
+      if (loginResponseDto.user.role === enRole.admin) {
+        window.location.pathname = "/dashboard/users";
+        return;
+      }
+
+      if (loginResponseDto.user.role === enRole.writer) {
+        window.location.pathname = "/dashboard/posts";
+        return;
+      }
+
+      if (loginResponseDto.user.role === enRole.productManager) {
+        window.location.pathname = "/dashboard/categories";
+        return;
+      }
+
+      window.location.pathname = "/home";
     } catch (error) {
       console.log(error);
 

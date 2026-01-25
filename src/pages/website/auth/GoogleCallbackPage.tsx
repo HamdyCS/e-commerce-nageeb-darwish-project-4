@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { getAsync, postAsync } from "../../../services/apiService";
-import { Api_Url, Google_Auth_Callback } from "../../../Apis/Apis";
+import { API_URL, GOOGLE_AUTH_CALLBACK } from "../../../Apis/Apis";
 import { useLocation } from "react-router-dom";
 import GoogleCallbackResponseDto from "../../../dtos/auth/GoogleCallbackResponseDto";
 import { setInCookie } from "../../../services/cookieService";
@@ -13,7 +13,7 @@ export default function GoogleCallbackPage() {
       try {
         const googleCallbackResponseDto =
           await getAsync<GoogleCallbackResponseDto>(
-            `${Google_Auth_Callback}${location.search}`,
+            `${GOOGLE_AUTH_CALLBACK}${location.search}`,
           );
 
         //save token in cookie

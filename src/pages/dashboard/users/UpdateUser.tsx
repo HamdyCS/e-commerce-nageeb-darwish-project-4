@@ -5,10 +5,10 @@ import React, {
   useEffect,
   useState,
 } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 import UserDto from "../../../dtos/auth/UserDto";
 import Axios from "../../../Apis/Axios";
-import { Get_User, Update_User } from "../../../Apis/Apis";
+import { GET_USER, UPDATE_USER } from "../../../Apis/Apis";
 import Loading from "../../../components/ui/loading/Loading";
 import { Button, Dropdown, Form } from "react-bootstrap";
 import Swal from "sweetalert2";
@@ -34,7 +34,7 @@ export default function UpdateUser() {
       if (!userId) return;
 
       try {
-        const data = await Axios.get<UserDto>(`${Get_User(userId)}`).then(
+        const data = await Axios.get<UserDto>(`${GET_USER(userId)}`).then(
           (res) => res.data,
         );
 
@@ -114,7 +114,7 @@ export default function UpdateUser() {
 
       //call api
       const data = await Axios.post<UpdateUserDto>(
-        `${Update_User(user.id.toString())}`,
+        `${UPDATE_USER(user.id.toString())}`,
         form,
       ).then((res) => res.data);
 
@@ -134,6 +134,11 @@ export default function UpdateUser() {
         <Loading />
       </div>
     );
+
+  //check if not loading and user not found
+  if (!loading && !user.id) {
+    return <Navigate to="/dashboard/users/page/404" replace />;
+  }
 
   return (
     <div>

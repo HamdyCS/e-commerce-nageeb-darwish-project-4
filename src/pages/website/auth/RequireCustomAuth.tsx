@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from "react";
-import { getFromCookie } from "../../../services/cookieService";
-import { getAsync } from "../../../services/apiService";
-import { Get_Current_User } from "../../../Apis/Apis";
-import UserDto from "../../../dtos/auth/UserDto";
-import Loading from "../../../components/ui/loading/Loading";
-import { Navigate, Outlet, useLocation, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
+import { GET_AUTH_USER } from "../../../Apis/Apis";
 import Axios from "../../../Apis/Axios";
-import { enRole, isEnRole, Role } from "../../../dtos/auth/Role";
+import Loading from "../../../components/ui/loading/Loading";
+import { enRole, isEnRole } from "../../../dtos/auth/Role";
+import UserDto from "../../../dtos/auth/UserDto";
+import { getFromCookie } from "../../../services/cookieService";
 
 export default function RequireCustomAuth({ roles }: { roles: enRole[] }) {
   const [loading, setLoading] = useState(true);
@@ -14,10 +13,11 @@ export default function RequireCustomAuth({ roles }: { roles: enRole[] }) {
 
   const location = useLocation();
 
+  //get user data
   useEffect(() => {
     async function fetchData() {
       try {
-        const user = await Axios.get<UserDto>(Get_Current_User).then(
+        const user = await Axios.get<UserDto>(GET_AUTH_USER).then(
           (res) => res.data,
         );
         user && setUser(user);
@@ -31,6 +31,7 @@ export default function RequireCustomAuth({ roles }: { roles: enRole[] }) {
     fetchData();
   }, []);
 
+  //check if loading
   if (loading)
     return (
       <div className="p-5">
@@ -46,7 +47,7 @@ export default function RequireCustomAuth({ roles }: { roles: enRole[] }) {
       state={{
         from: location,
       }}
-      to="/dashboard/403"
+      to="/404"
     />
   );
 }

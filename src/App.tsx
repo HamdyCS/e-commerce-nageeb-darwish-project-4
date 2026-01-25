@@ -12,6 +12,9 @@ import LoginPage from "./pages/website/auth/LoginPage";
 import Register from "./pages/website/auth/RegisterPage";
 import RequireAuth from "./pages/website/auth/RequireAuth";
 import HomePage from "./pages/website/HomePage";
+import { enRole } from "./dtos/auth/Role";
+import RequireCustomAuth from "./pages/website/auth/RequireCustomAuth";
+import RequireBack from "./pages/website/auth/RequireBack";
 
 function App() {
   const [windowSize, setWindowSize] = useAtom(windowSizeAtom);
@@ -39,8 +42,11 @@ function App() {
         <Route element={<Layout />}>
           <Route path="/" element={<HomePage />} />
           <Route path="/home" element={<HomePage />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/login" element={<LoginPage />} />
+
+          <Route element={<RequireBack />}>
+            <Route path="/register" element={<Register />} />
+            <Route path="/login" element={<LoginPage />} />
+          </Route>
 
           <Route
             path="/auth/google/callback"
@@ -49,7 +55,16 @@ function App() {
           <Route path="*" element={<NotFound />} />
           {/* protected routes */}
           <Route element={<RequireAuth />}>
-            <Route path="/dashboard/*" element={<Dashboard />} />
+            {/* Require custom auth */}
+            <Route
+              element={
+                <RequireCustomAuth
+                  roles={[enRole.admin, enRole.writer, enRole.productManager]}
+                />
+              }
+            >
+              <Route path="/dashboard/*" element={<Dashboard />} />
+            </Route>
           </Route>
         </Route>
       </Routes>

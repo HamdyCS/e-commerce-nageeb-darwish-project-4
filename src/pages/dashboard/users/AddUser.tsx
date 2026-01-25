@@ -2,11 +2,11 @@ import { Activity, FormEvent, useEffect, useState } from "react";
 import { Button, Form } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
-import { Add_User } from "../../../Apis/Apis";
+import { ADD_USER } from "../../../Apis/Apis";
 import Axios from "../../../Apis/Axios";
 import Loading from "../../../components/ui/loading/Loading";
 import AddUserDto from "../../../dtos/auth/AddUserDto";
-import { Role } from "../../../dtos/auth/Role";
+import { enRole, Role } from "../../../dtos/auth/Role";
 import UserDto from "../../../dtos/auth/UserDto";
 interface FormType {
   name: string;
@@ -96,7 +96,7 @@ export default function AddUser() {
       };
 
       //call api
-      const data = await Axios.post(Add_User, addUserDto).then(
+      const data = await Axios.post(ADD_USER, addUserDto).then(
         (res) => res.data,
       );
 
@@ -174,9 +174,10 @@ export default function AddUser() {
                 <option disabled selected>
                   Select Role
                 </option>
-                <option value="1995">Admin</option>
-                <option value="2001">Writer</option>
-                <option value="1991">User</option>
+                <option value={enRole.admin}>Admin</option>
+                <option value={enRole.writer}>Writer</option>
+                <option value={enRole.user}>User</option>
+                <option value={enRole.productManager}>Product Manager</option>
               </Form.Select>
             </Form.Group>
 

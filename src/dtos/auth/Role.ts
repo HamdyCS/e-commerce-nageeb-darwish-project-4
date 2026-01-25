@@ -1,16 +1,21 @@
 //1995 => admin
-//2001 => Writer
-//1991 => user
-export type Role = "2001" | "1995" | "1991";
+//1991 => writer
+//2001 => user
+//1999 => productManager
+export type Role = "2001" | "1995" | "1991" | "1999";
 
-export function getRoleNameByRoleNumber(role: "2001" | "1995" | "1991") {
+export function getRoleNameByRoleNumber(
+  role: "2001" | "1995" | "1991" | "1999",
+) {
   switch (role) {
     case "2001":
-      return "Writer";
+      return "User";
     case "1995":
       return "Admin";
     case "1991":
-      return "User";
+      return "Writer";
+    case "1999":
+      return "Product Manager";
     default:
       return "Unknown";
   }
@@ -18,8 +23,9 @@ export function getRoleNameByRoleNumber(role: "2001" | "1995" | "1991") {
 
 export enum enRole {
   "admin" = "1995",
-  "writer" = "2001",
-  "user" = "1991",
+  "writer" = "1991",
+  "user" = "2001",
+  "productManager" = "1999",
 }
 
 export function isEnRole(value: unknown): value is enRole {

@@ -1,11 +1,11 @@
 import axios from "axios";
-import { Api_Url } from "./Apis";
+import { API_URL } from "./Apis";
 import { getFromCookie } from "../services/cookieService";
 
 const token = getFromCookie("BearerToken") || "";
 
 const Axios = axios.create({
-  baseURL: Api_Url,
+  baseURL: API_URL,
   headers: {
     "Content-Type": "application/json",
     Authorization: `Bearer ${token}`,

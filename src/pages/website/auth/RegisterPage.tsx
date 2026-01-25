@@ -5,6 +5,8 @@ import RegisterDto from "../../../dtos/auth/RegisterDto";
 import Swal from "sweetalert2";
 import Loading from "../../../components/ui/loading/Loading";
 import { Button, Form } from "react-bootstrap";
+import { setInCookie } from "../../../services/cookieService";
+import LoginResponseDto from "../../../dtos/auth/LoginResponseDto";
 
 interface FormType {
   name: string;
@@ -84,12 +86,16 @@ export default function Register() {
       };
 
       //call api
-      await postAsync("register", registerDto);
+      const loginResponseDto = await postAsync<LoginResponseDto>(
+        "register",
+        registerDto,
+      );
 
       //set to true to show alert
       setRegisterDone(true);
 
-    
+      //save token in cookie
+      setInCookie("BearerToken", loginResponseDto.token);
     } catch (error) {
       console.log(error);
     } finally {
