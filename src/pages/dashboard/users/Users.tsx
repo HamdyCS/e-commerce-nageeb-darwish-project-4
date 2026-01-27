@@ -1,21 +1,20 @@
-import {
-  faPenToSquare,
-  faPlus,
-  faTrash,
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
-import { Button, Table } from "react-bootstrap";
-import { Link } from "react-router-dom";
-import {
-  ALL_USERS,
-  DELETE_USER,
-  GET_AUTH_USER as GET_AUTH_USER,
-} from "../../../Apis/Apis";
+import { ALL_USERS, DELETE_USER, GET_AUTH_USER } from "../../../Apis/Apis";
 import Axios from "../../../Apis/Axios";
+import CustomTable, {
+  BaseTableDataType,
+  TableHeaderType,
+} from "../../../components/ui/CustomTable";
 import Loading from "../../../components/ui/loading/Loading";
 import { getRoleNameByRoleNumber } from "../../../dtos/auth/Role";
 import UserDto from "../../../dtos/auth/UserDto";
+
+//لازم يرث ال BaseTableDataType => اللي انا عاملها
+//اللي فيها ال property الزيادة
+interface TableDataType extends BaseTableDataType, UserDto {
+  id: number;
+  roleName: string;
+}
 
 export default function Users() {
   const [users, setUsers] = useState<UserDto[]>([]);
@@ -34,8 +33,6 @@ export default function Users() {
 
         data && setUsers(data);
 
-        console.log(data);
-
         //get auth user
         const user = await Axios.get<UserDto>(`${GET_AUTH_USER}`).then(
           (res) => res.data,
@@ -53,7 +50,7 @@ export default function Users() {
   }, [counter]);
 
   //delete user
-  async function handelDelete(id: number) {
+  async function handelDelete(id: number | string) {
     try {
       //confirm delete
       const isConfirmed = window.confirm(
@@ -85,88 +82,46 @@ export default function Users() {
     }
   }
 
-  //user elements
-  const usersElements = users.map((user) => {
+  //table header
+  //لازم المفتاح يكون نفس اسم البروبرتي في قعدة البيانات
+  const tableHeader: TableHeaderType[] = [
+    { name: "Id", key: "id" },
+    { name: "Name", key: "name" },
+    { name: "Email", key: "email" },
+    { name: "Email verified at", key: "email_verified_at" },
+    { name: "Role", key: "roleName" },
+    { name: "Created at", key: "created_at" },
+    { name: "Updated at", key: "updated_at" },
+  ];
+
+  //table data
+  const tableData: TableDataType[] = users.map((user) => {
+    //check if user is auth user
     const isAuthUser = authUser.id === user.id;
-    return (
-      <tr
-        key={user.id}
-        style={{
-          opacity: isAuthUser ? "0.5" : "1",
-        }}
-      >
-        <td>{user.id}</td>
-        <td> {isAuthUser ? user.name + " (You)" : user.name}</td>
-        <td>{user.email}</td>
-        <td>{getRoleNameByRoleNumber(user.role)}</td>
-        <td>{user.email_verified_at}</td>
-        <td>{user.created_at}</td>
-        <td>{user.updated_at}</td>
-        <td>
-          <div className="d-flex gap-3">
-            <Link to={`/dashboard/users/${user.id}`}>
-              <Button className="btn-secondary rounded px-4 py-2 d-flex justify-content-center align-items-center gap-1">
-                <FontAwesomeIcon size="lg" icon={faPenToSquare} />
-                <p className="p-0 m-0">Edit</p>
-              </Button>
-            </Link>
-            {!isAuthUser && (
-              <Button
-                className="btn-danger rounded px-4 py-2 d-flex justify-content-center align-items-center gap-1"
-                onClick={() => handelDelete(user.id)}
-              >
-                <FontAwesomeIcon size="lg" icon={faTrash} />{" "}
-                <p className="p-0 m-0">Delete</p>
-              </Button>
-            )}
-          </div>
-        </td>
-      </tr>
-    );
+
+    return {
+      ...user,
+      roleName: getRoleNameByRoleNumber(user.role),
+      name: isAuthUser ? `${user.name} (You)` : user.name,
+      disabled: isAuthUser,
+      onDelete: handelDelete,
+      showDeleteButton: !isAuthUser,
+      updatePath: `/dashboard/users/${user.id}`,
+    };
   });
 
   return (
-    <div className="Users">
-      <div className="d-flex align-items-center justify-content-between mb-3">
-        <h2 className="text-dark fw-bold fs-1 mb-3 ">Users</h2>
-        <Link to="/dashboard/users/add">
-          <Button className="btn-primary rounded px-4 py-2 d-flex justify-content-center align-items-center gap-1">
-            <FontAwesomeIcon size="lg" icon={faPlus} />
-            <p className="p-0 m-0">Add</p>
-          </Button>
-        </Link>
-      </div>
-      <Table striped bordered hover variant="light" responsive>
-        <thead>
-          <tr>
-            <th>Id </th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Role</th>
-            <th>Email verified at</th>
-            <th>Created at</th>
-            <th>Updated at</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {loading && (
-            <tr>
-              <td colSpan={8}>
-                <Loading />
-              </td>
-            </tr>
-          )}
-          {!loading && users.length === 0 && (
-            <tr>
-              <td colSpan={8} className="text-center fw-bold text-secondary">
-                No users found!
-              </td>
-            </tr>
-          )}
-          {!loading && usersElements}
-        </tbody>
-      </Table>
+    <div className="users">
+      {loading && <Loading />}
+
+      {!loading && (
+        <CustomTable<TableDataType>
+          tableHeader={tableHeader}
+          data={tableData}
+          tableName="Users"
+          addPath="/dashboard/users/add"
+        />
+      )}
     </div>
   );
 }

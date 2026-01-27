@@ -7,9 +7,9 @@ export default function Loading() {
       <div
         className=" rounded-circle  spinner-border"
         style={{
-          width: "100px",
-          height: "100px",
-          border: "5px solid blue",
+          width: "50px",
+          height: "50px",
+          border: "5px solid gray",
           borderBottom: "5px solid transparent",
           animationDuration: "1s",
         }}

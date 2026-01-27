@@ -21,7 +21,6 @@ export async function getAsync<T>(path: string, token?: string) {
   const config = getAuthConfig(token);
 
   const response = await axios.get<T>(`${API_URL}${path}`, config);
-  console.log(response);
 
   return response.data;
 }
@@ -31,7 +30,6 @@ export async function postAsync<T>(path: string, data: any, token?: string) {
   const config = getAuthConfig(token);
 
   const response = await axios.post<T>(`${API_URL}${path}`, data, config);
-  console.log(response);
 
   return response.data;
 }
@@ -41,7 +39,6 @@ export async function putAsync<T>(path: string, data: any, token?: string) {
   const config = getAuthConfig(token);
 
   const response = await axios.put<T>(`${API_URL}${path}`, data, config);
-  console.log(response);
 
   return response.data;
 }
@@ -51,7 +48,6 @@ export async function deleteAsync<T>(path: string, token?: string) {
   const config = getAuthConfig(token);
 
   const response = await axios.delete<T>(`${API_URL}${path}`, config);
-  console.log(response);
 
   return response.data;
 }

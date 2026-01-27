@@ -12,6 +12,8 @@ import Users from "./users/Users";
 import { enRole } from "../../dtos/auth/Role";
 import RequireCustomAuthDashboard from "./auth/RequireCustomAuthDashboard";
 import Categories from "./categories/Categories";
+import AddCategory from "./categories/AddCategory";
+import UpdateCategory from "./categories/UpdateCategory";
 
 export default function Dashboard() {
   const [showDashboardSidebar, setShowDashboardSidebar] = useAtom(
@@ -106,6 +108,8 @@ export default function Dashboard() {
               }
             >
               <Route path="/categories" element={<Categories />} />
+              <Route path="/categories/add" element={<AddCategory />} />
+              <Route path="/categories/:id" element={<UpdateCategory />} />
             </Route>
 
             <Route path="/403" element={<ForbiddenPage />} />

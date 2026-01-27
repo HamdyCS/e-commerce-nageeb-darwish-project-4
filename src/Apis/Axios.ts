@@ -7,7 +7,6 @@ const token = getFromCookie("BearerToken") || "";
 const Axios = axios.create({
   baseURL: API_URL,
   headers: {
-    "Content-Type": "application/json",
     Authorization: `Bearer ${token}`,
   },
 });

@@ -13,3 +13,4 @@ export const UPDATE_USER = (id: string) => `user/edit/${id}`;
 
 //categories
 export const CATEGORIES = "categories";
+export const ADD_CATEGORY = "category/add";

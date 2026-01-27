@@ -42,6 +42,12 @@ const links = [
     name: "Categories",
     avalibaleRoles: [enRole.admin, enRole.productManager],
   },
+  {
+    path: "/dashboard/categories/add",
+    icon: faPlus,
+    name: "Add Category",
+    avalibaleRoles: [enRole.admin, enRole.productManager],
+  },
 ];
 
 export default function DashboardSidebar() {

@@ -190,10 +190,13 @@ export default function UpdateUser() {
                   Admin
                 </option>
                 <option value="2001" selected={form.role === "2001"}>
-                  Writer
+                  user
                 </option>
                 <option value="1991" selected={form.role === "1991"}>
-                  User
+                  Writer
+                </option>
+                <option value="1999" selected={form.role === "1999"}>
+                  Product Manager
                 </option>
               </Form.Select>
             </Form.Group>
