@@ -1,4 +1,4 @@
-import { Activity, FormEvent, useEffect, useState } from "react";
+import { Activity, FormEvent, useEffect, useRef, useState } from "react";
 import { Button, Form } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
@@ -24,6 +24,12 @@ export default function AddUser() {
   const [isActionDone, setIsActionDone] = useState<boolean>(false);
 
   const navigate = useNavigate();
+
+  const focus = useRef<HTMLInputElement | null>(null);
+  //handel focus
+  useEffect(() => {
+    focus.current?.focus();
+  }, []);
 
   //use it when registerDone is true
   useEffect(() => {
@@ -124,10 +130,6 @@ export default function AddUser() {
         <div>
           <h2 className="fw-bold mb-3 text-center">Add User</h2>
           <Form className="w-100" onSubmit={handleSubmit}>
-            <Form.Group className="mb-3" controlId="id">
-              <Form.Label disabled>Id</Form.Label>
-              <Form.Control disabled type="text" name="id" placeholder="id" />
-            </Form.Group>
             <Form.Group className="mb-3" controlId="name">
               <Form.Label>Name</Form.Label>
               <Form.Control
@@ -136,6 +138,7 @@ export default function AddUser() {
                 placeholder="name"
                 onChange={handelFormChange}
                 value={form.name}
+                ref={focus}
               />
             </Form.Group>
             <Form.Group className="mb-3" controlId="formBasicEmail">

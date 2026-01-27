@@ -1,4 +1,4 @@
-import { Activity, FormEvent, useEffect, useState } from "react";
+import { Activity, FormEvent, useEffect, useRef, useState } from "react";
 import { Button, Form } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
@@ -6,6 +6,7 @@ import { ADD_CATEGORY } from "../../../Apis/Apis";
 import Axios from "../../../Apis/Axios";
 import Loading from "../../../components/ui/loading/Loading";
 import AddCategoryDto from "../../../dtos/categories/AddCategoryDto";
+import { title } from "process";
 
 export default function AddCategory() {
   const [form, setForm] = useState<AddCategoryDto>({} as AddCategoryDto);
@@ -16,6 +17,12 @@ export default function AddCategory() {
   const [isActionDone, setIsActionDone] = useState<boolean>(false);
 
   const navigate = useNavigate();
+
+  const focus = useRef<HTMLInputElement | null>(null);
+  //handel focus
+  useEffect(() => {
+    focus.current?.focus();
+  }, []);
 
   //use it when registerDone is true
   useEffect(() => {
@@ -63,8 +70,6 @@ export default function AddCategory() {
     try {
       setLoading(true);
 
-      console.log(form.image);
-
       //form data
       const formData = new FormData();
       formData.append("title", form.title);
@@ -74,8 +79,6 @@ export default function AddCategory() {
       const data = await Axios.post(ADD_CATEGORY, formData).then(
         (res) => res.data,
       );
-
-      console.log(data);
 
       //set to true to show alert
       setIsActionDone(true);
@@ -109,6 +112,7 @@ export default function AddCategory() {
                 placeholder="title"
                 onChange={handelFormChange}
                 value={form.title}
+                ref={focus}
               />
             </Form.Group>
 

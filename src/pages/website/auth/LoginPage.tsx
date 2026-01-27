@@ -1,4 +1,11 @@
-import React, { Activity, FormEvent, useState, MouseEvent } from "react";
+import React, {
+  Activity,
+  FormEvent,
+  useState,
+  MouseEvent,
+  useRef,
+  useEffect,
+} from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { postAsync } from "../../../services/apiService";
 import Loading from "../../../components/ui/loading/Loading";
@@ -15,7 +22,12 @@ export default function LoginPage() {
   const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
 
-  const navigate = useNavigate();
+  const emailInputElement = useRef<HTMLInputElement | null>(null);
+
+  //focus name input when component mount
+  useEffect(() => {
+    emailInputElement?.current?.focus();
+  }, []);
 
   //handel form changes
   function handelFormChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -109,6 +121,7 @@ export default function LoginPage() {
                 name="email"
                 placeholder="email"
                 onChange={handelFormChange}
+                ref={emailInputElement}
               />
             </Form.Group>
 

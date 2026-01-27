@@ -1,4 +1,4 @@
-import React, { Activity, FormEvent, useEffect, useState } from "react";
+import React, { Activity, FormEvent, useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { postAsync } from "../../../services/apiService";
 import RegisterDto from "../../../dtos/auth/RegisterDto";
@@ -21,6 +21,13 @@ export default function Register() {
   const [loading, setLoading] = useState<boolean>(false);
 
   const navigate = useNavigate();
+  
+  const nameInputElement = useRef<HTMLInputElement | null>(null);
+
+  //focus name input when component mount
+  useEffect(() => {
+    nameInputElement?.current?.focus();
+  }, []);
 
   //use it when registerDone is true
   useEffect(() => {
@@ -127,6 +134,7 @@ export default function Register() {
                 name="name"
                 placeholder="name"
                 onChange={handelFormChange}
+                ref={nameInputElement}
               />
             </Form.Group>
             <Form.Group className="mb-3" controlId="formBasicEmail">

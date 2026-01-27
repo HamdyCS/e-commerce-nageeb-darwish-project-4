@@ -34,9 +34,9 @@ export default function UpdateUser() {
       if (!userId) return;
 
       try {
-        const data = await Axios.get<UserDto>(`${GET_USER(userId)}`).then(
-          (res) => res.data,
-        );
+        const data = await Axios.get<UserDto>(
+          `${GET_USER(Number(userId))}`,
+        ).then((res) => res.data);
 
         //update userInfo
         data && setUser(data);
@@ -114,7 +114,7 @@ export default function UpdateUser() {
 
       //call api
       const data = await Axios.post<UpdateUserDto>(
-        `${UPDATE_USER(user.id.toString())}`,
+        `${UPDATE_USER(user.id)}`,
         form,
       ).then((res) => res.data);
 

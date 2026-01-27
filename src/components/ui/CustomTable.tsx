@@ -16,9 +16,9 @@ export interface TableHeaderType {
 
 //الحاجات الاساسية اللي لازم تكون تحتوي عليها ال data
 export interface BaseTableDataType {
-  id: number | string;
+  id: number;
   disabled?: boolean;
-  onDelete: (id: number | string) => Promise<void>;
+  onDelete: (id: number) => Promise<void>;
   showDeleteButton: boolean;
   updatePath: string;
   [key: string]: any; //Index Signature => يمكن فهرسته باستخدام string

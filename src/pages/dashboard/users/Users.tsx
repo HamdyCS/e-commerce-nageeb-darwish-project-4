@@ -12,7 +12,6 @@ import UserDto from "../../../dtos/auth/UserDto";
 //لازم يرث ال BaseTableDataType => اللي انا عاملها
 //اللي فيها ال property الزيادة
 interface TableDataType extends BaseTableDataType, UserDto {
-  id: number;
   roleName: string;
 }
 
@@ -50,7 +49,7 @@ export default function Users() {
   }, [counter]);
 
   //delete user
-  async function handelDelete(id: number | string) {
+  async function handelDelete(id: number) {
     try {
       //confirm delete
       const isConfirmed = window.confirm(
@@ -63,7 +62,7 @@ export default function Users() {
       setLoading(true);
 
       //delete user from api
-      const data = await Axios.delete(`${DELETE_USER(id.toString())}`).then(
+      const data = await Axios.delete(`${DELETE_USER(Number(id))}`).then(
         (res) => res.data,
       );
 
