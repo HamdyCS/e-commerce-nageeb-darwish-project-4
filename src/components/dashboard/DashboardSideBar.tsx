@@ -16,6 +16,7 @@ import { enRole, isEnRole } from "../../dtos/auth/Role";
 import UserDto from "../../dtos/auth/UserDto";
 import Loading from "../ui/loading/Loading";
 import "./DashboardBars.css";
+import { faProductHunt } from "@fortawesome/free-brands-svg-icons";
 
 const links = [
   {
@@ -46,6 +47,18 @@ const links = [
     path: "/dashboard/categories/add",
     icon: faPlus,
     name: "Add Category",
+    avalibaleRoles: [enRole.admin, enRole.productManager],
+  },
+  {
+    path: "/dashboard/products",
+    icon: faProductHunt,
+    name: "Products",
+    avalibaleRoles: [enRole.admin, enRole.productManager],
+  },
+  {
+    path: "/dashboard/products/add",
+    icon: faPlus,
+    name: "Add Product",
     avalibaleRoles: [enRole.admin, enRole.productManager],
   },
 ];

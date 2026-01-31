@@ -5,7 +5,6 @@ import CustomTable, {
   BaseTableDataType,
   TableHeaderType,
 } from "../../../components/ui/CustomTable";
-import Loading from "../../../components/ui/loading/Loading";
 import { getRoleNameByRoleNumber } from "../../../dtos/auth/Role";
 import UserDto from "../../../dtos/auth/UserDto";
 
@@ -111,16 +110,13 @@ export default function Users() {
 
   return (
     <div className="users">
-      {loading && <Loading />}
-
-      {!loading && (
-        <CustomTable<TableDataType>
-          tableHeader={tableHeader}
-          data={tableData}
-          tableName="Users"
-          addPath="/dashboard/users/add"
-        />
-      )}
+      <CustomTable<TableDataType>
+        tableHeader={tableHeader}
+        data={tableData}
+        tableName="Users"
+        addPath="/dashboard/users/add"
+        isLoading={loading}
+      />
     </div>
   );
 }

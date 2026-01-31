@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
-import { GET_AUTH_USER } from "../../../Apis/Apis";
-import Axios from "../../../Apis/Axios";
-import Loading from "../../../components/ui/loading/Loading";
-import { enRole, isEnRole } from "../../../dtos/auth/Role";
-import UserDto from "../../../dtos/auth/UserDto";
-import { getFromCookie } from "../../../services/cookieService";
+import { GET_AUTH_USER } from "../../../../Apis/Apis";
+import Axios from "../../../../Apis/Axios";
+import Loading from "../../../../components/ui/loading/Loading";
+import { enRole, isEnRole } from "../../../../dtos/auth/Role";
+import UserDto from "../../../../dtos/auth/UserDto";
+import { getFromCookie } from "../../../../services/cookieService";
 
 export default function RequireCustomAuth({ roles }: { roles: enRole[] }) {
   const [loading, setLoading] = useState(true);

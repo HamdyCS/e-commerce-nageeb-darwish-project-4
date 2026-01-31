@@ -5,7 +5,7 @@ import Swal from "sweetalert2";
 import { ADD_CATEGORY } from "../../../Apis/Apis";
 import Axios from "../../../Apis/Axios";
 import Loading from "../../../components/ui/loading/Loading";
-import AddCategoryDto from "../../../dtos/categories/AddCategoryDto";
+import AddCategoryDto from "../../../dtos/category/AddCategoryDto";
 import { title } from "process";
 
 export default function AddCategory() {

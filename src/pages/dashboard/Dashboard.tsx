@@ -1,19 +1,23 @@
+import "./Dashboard.css";
 import { useAtom } from "jotai";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { showDashboardSidebarAtom } from "../../atoms/DashBoardAtom";
 import { windowSizeAtom } from "../../atoms/WindowAtom";
 import DashboardSidebar from "../../components/dashboard/DashboardSideBar";
 import DashboardTopBar from "../../components/dashboard/DashboardTopBar";
-import NotFound from "../NotFound";
-import ForbiddenPage from "../website/auth/ForbiddenPage";
+import NotFound from "../website/errors/NotFound";
+import ForbiddenPage from "../website/auth/errors/ForbiddenPage";
 import AddUser from "./users/AddUser";
 import UpdateUser from "./users/UpdateUser";
 import Users from "./users/Users";
 import { enRole } from "../../dtos/auth/Role";
-import RequireCustomAuthDashboard from "./auth/RequireCustomAuthDashboard";
+import RequireCustomAuthDashboard from "./protecting/RequireCustomAuthDashboard";
 import Categories from "./categories/Categories";
 import AddCategory from "./categories/AddCategory";
 import UpdateCategory from "./categories/UpdateCategory";
+import Products from "./products/Products";
+import AddProduct from "./products/AddProduct";
+import UpdateProduct from "./products/UpdateProduct";
 
 export default function Dashboard() {
   const [showDashboardSidebar, setShowDashboardSidebar] = useAtom(
@@ -55,7 +59,7 @@ export default function Dashboard() {
           className="p-4 shadow-sm"
           style={{
             backgroundColor: "#f7f8fa",
-            height: "2000px",
+            minHeight: `calc(100vh - 78px)`,
             marginLeft: showDashboardSidebar
               ? windowSize <= 992
                 ? "0px"
@@ -110,6 +114,9 @@ export default function Dashboard() {
               <Route path="/categories" element={<Categories />} />
               <Route path="/categories/add" element={<AddCategory />} />
               <Route path="/categories/:id" element={<UpdateCategory />} />
+              <Route path="/products" element={<Products />} />
+              <Route path="/products/add" element={<AddProduct />} />
+              <Route path="/products/:id" element={<UpdateProduct />} />
             </Route>
 
             <Route path="/403" element={<ForbiddenPage />} />

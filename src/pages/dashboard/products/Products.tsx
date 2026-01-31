@@ -1,29 +1,36 @@
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
-import { CATEGORIES, DELETE_CATEGORY } from "../../../Apis/Apis";
+import {
+  CATEGORIES,
+  DELETE_CATEGORY,
+  DELETE_PRODUCT,
+  PRODUCTS,
+} from "../../../Apis/Apis";
 import Axios from "../../../Apis/Axios";
 import CustomTable, {
   BaseTableDataType,
   TableHeaderType,
 } from "../../../components/ui/CustomTable";
 import CategoryDto from "../../../dtos/category/CategoryDto";
-interface TableDataType extends CategoryDto, BaseTableDataType {}
-export default function Categories() {
-  const [categories, setCategories] = useState<CategoryDto[]>([]);
+import ProductDto from "../../../dtos/product/ProductDto";
+
+interface TableDataType extends ProductDto, BaseTableDataType {}
+export default function Products() {
+  const [products, setProducts] = useState<ProductDto[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [counter, setCounter] = useState<number>(0);
   const [isDeletedDone, setIsDeletedDone] = useState<boolean>(false);
 
-  //get categories
+  //get products
   useEffect(() => {
     async function fetchData() {
       try {
-        //call api to get categories
-        const data = await Axios.get<CategoryDto[]>(CATEGORIES).then(
+        //call api to get products
+        const data = await Axios.get<ProductDto[]>(PRODUCTS).then(
           (res) => res.data,
         );
 
-        data && setCategories(data);
+        data && setProducts(data);
       } catch (err) {
         console.log(err);
       } finally {
@@ -43,7 +50,7 @@ export default function Categories() {
       showCancelButton: true,
       showConfirmButton: false,
       icon: "success",
-      title: "Deleteted category successfuly.",
+      title: "Deleteted product successfuly.",
     }).then(() => {
       //reset is deleted done
       setIsDeletedDone(false);
@@ -60,13 +67,13 @@ export default function Categories() {
   async function handelDelete(id: number) {
     //confirm to delete
     const confirm = window.confirm(
-      `Are you sure you want to delete this category Id: ${id}`,
+      `Are you sure you want to delete this product Id: ${id}`,
     );
     if (!confirm) return;
 
     try {
       //call api
-      const data = await Axios.delete(`${DELETE_CATEGORY(id)}`).then(
+      const data = await Axios.delete(`${DELETE_PRODUCT(id)}`).then(
         (res) => res.data,
       );
 
@@ -83,25 +90,29 @@ export default function Categories() {
   const tableHeader: TableHeaderType[] = [
     { name: "Id", key: "id" },
     { name: "Title", key: "title" },
-    { name: "Image", key: "image" },
+    { name: "Description", key: "description" },
+    { name: "Price", key: "price" },
+    { name: "Discount", key: "discount" },
+    { name: "About", key: "About" },
+    { name: "Category", key: "category" },
+    { name: "Rating", key: "rating" },
   ];
 
   //table data
-  const tableData: TableDataType[] = categories.map((category) => {
+  const tableData: TableDataType[] = products.map((category) => {
     return {
       ...category,
       onDelete: handelDelete,
-      updatePath: `/dashboard/categories/${category.id}`,
+      updatePath: `/dashboard/products/${category.id}`,
       showDeleteButton: true,
-      isImage: true,
     };
   });
 
   return (
-    <div className="catigories">
+    <div className="Products">
       <CustomTable
-        tableName="Categories"
-        addPath="/dashboard/categories/add"
+        tableName="Products"
+        addPath="/dashboard/products/add"
         tableHeader={tableHeader}
         data={tableData}
         isLoading={loading}

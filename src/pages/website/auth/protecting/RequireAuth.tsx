@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { getFromCookie } from "../../../services/cookieService";
-import { getAsync } from "../../../services/apiService";
-import { GET_AUTH_USER } from "../../../Apis/Apis";
-import UserDto from "../../../dtos/auth/UserDto";
-import Loading from "../../../components/ui/loading/Loading";
+import { getFromCookie } from "../../../../services/cookieService";
+import { getAsync } from "../../../../services/apiService";
+import { GET_AUTH_USER } from "../../../../Apis/Apis";
+import UserDto from "../../../../dtos/auth/UserDto";
+import Loading from "../../../../components/ui/loading/Loading";
 import { Navigate, Outlet, useLocation, useNavigate } from "react-router-dom";
 
 export default function RequireAuth() {

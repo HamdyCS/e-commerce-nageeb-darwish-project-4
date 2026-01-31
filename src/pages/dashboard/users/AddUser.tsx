@@ -6,7 +6,7 @@ import { ADD_USER } from "../../../Apis/Apis";
 import Axios from "../../../Apis/Axios";
 import Loading from "../../../components/ui/loading/Loading";
 import AddUserDto from "../../../dtos/auth/AddUserDto";
-import { enRole, Role } from "../../../dtos/auth/Role";
+import { enRole, isEnRole, Role } from "../../../dtos/auth/Role";
 import UserDto from "../../../dtos/auth/UserDto";
 interface FormType {
   name: string;
@@ -16,7 +16,9 @@ interface FormType {
   role: Role;
 }
 export default function AddUser() {
-  const [form, setForm] = useState<FormType>({} as FormType);
+  const [form, setForm] = useState<FormType>({
+    role: enRole.user,
+  } as FormType);
 
   const [error, setError] = useState<string>("");
 
@@ -53,6 +55,7 @@ export default function AddUser() {
     setForm(newForm);
   }
 
+  //handel submit
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
@@ -86,7 +89,7 @@ export default function AddUser() {
     }
 
     //validition role
-    if (!form.role) {
+    if (isEnRole(form.role)) {
       setError("Please select role");
       return;
     }
@@ -115,17 +118,13 @@ export default function AddUser() {
     }
   }
 
-  //check if loading
-  if (loading)
-    return (
-      <div className="flex justify-content-center">
-        <Loading />
-      </div>
-    );
-
   return (
     <div>
-      {loading && <Loading />}
+      {loading && (
+        <div className="d-flex justify-content-center">
+          <Loading />
+        </div>
+      )}
       <Activity mode={loading ? "hidden" : "visible"}>
         <div>
           <h2 className="fw-bold mb-3 text-center">Add User</h2>
@@ -170,13 +169,12 @@ export default function AddUser() {
             <Form.Group className="mb-3" controlId="role">
               <Form.Label>Role</Form.Label>
               <Form.Select
+                value={form.role}
                 onChange={(e) =>
                   setForm({ ...form, role: e.target.value as Role })
                 }
               >
-                <option disabled selected>
-                  Select Role
-                </option>
+                <option disabled>Select Role</option>
                 <option value={enRole.admin}>Admin</option>
                 <option value={enRole.writer}>Writer</option>
                 <option value={enRole.user}>User</option>

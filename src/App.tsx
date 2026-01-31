@@ -6,15 +6,15 @@ import "./App.css";
 import { windowSizeAtom } from "./atoms/WindowAtom";
 import Layout from "./components/website/Layout";
 import Dashboard from "./pages/dashboard/Dashboard";
-import NotFound from "./pages/NotFound";
+import NotFound from "./pages/website/errors/NotFound";
 import GoogleCallbackPage from "./pages/website/auth/GoogleCallbackPage";
 import LoginPage from "./pages/website/auth/LoginPage";
 import Register from "./pages/website/auth/RegisterPage";
-import RequireAuth from "./pages/website/auth/RequireAuth";
+import RequireAuth from "./pages/website/auth/protecting/RequireAuth";
 import HomePage from "./pages/website/HomePage";
 import { enRole } from "./dtos/auth/Role";
-import RequireCustomAuth from "./pages/website/auth/RequireCustomAuth";
-import RequireBack from "./pages/website/auth/RequireBack";
+import RequireCustomAuth from "./pages/website/auth/protecting/RequireCustomAuth";
+import RequireBack from "./pages/website/auth/protecting/RequireBack";
 
 function App() {
   const [windowSize, setWindowSize] = useAtom(windowSizeAtom);

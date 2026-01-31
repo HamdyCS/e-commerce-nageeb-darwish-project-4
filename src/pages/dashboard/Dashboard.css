@@ -1,0 +1,19 @@
+.custom-progress-bar {
+  .inner-progress {
+    position: relative;
+    width: 0;
+    height: 100%;
+    background-color: blue;
+    transition: width 0.2s ease-in-out;
+
+    &::before {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: white;
+      content: attr(data-label);
+      font-size: 13px;
+    }
+  }
+}

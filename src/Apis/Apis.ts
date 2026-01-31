@@ -17,3 +17,14 @@ export const GET_CATEGORY = (id: number) => `category/${id}`;
 export const ADD_CATEGORY = "category/add";
 export const DELETE_CATEGORY = (id: number) => `category/${id}`;
 export const UPDATE_CATEGORY = (id: number) => `category/edit/${id}`;
+
+//products
+export const PRODUCTS = "products";
+export const GET_PRODUCT = (id: number) => `product/${id}`;
+export const ADD_PRODUCT = "product/add";
+export const DELETE_PRODUCT = (id: number) => `product/${id}`;
+export const UPDATE_PRODUCT = (id: number) => `product/edit/${id}`;
+
+//product images
+export const ADD_PRODUCT_IMAGE = "product-img/add";
+export const DELETE_PRODUCT_IMAGE = (id: number) => `product-img/${id}`;

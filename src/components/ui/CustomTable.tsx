@@ -4,9 +4,9 @@ import {
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { ReactNode } from "react";
 import { Button, Table } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import Loading from "./loading/Loading";
 
 //table header
 export interface TableHeaderType {
@@ -30,6 +30,7 @@ export default function CustomTable<T extends BaseTableDataType>(tableProps: {
   addPath: string;
   tableHeader: TableHeaderType[];
   data: T[];
+  isLoading: boolean;
 }) {
   //table header elements
   const tableHeaderElements = tableProps.tableHeader.map((item) => (
@@ -110,7 +111,14 @@ export default function CustomTable<T extends BaseTableDataType>(tableProps: {
           </tr>
         </thead>
         <tbody className="border">
-          {tableBodyElements.length === 0 ? (
+          {tableProps.isLoading && (
+            <tr>
+              <td colSpan={tableHeaderElements.length + 1}>
+                <Loading />
+              </td>
+            </tr>
+          )}
+          {!tableProps.isLoading && tableBodyElements.length === 0 && (
             <tr>
               <td
                 className="text-center fw-bold text-secondary"
@@ -119,9 +127,10 @@ export default function CustomTable<T extends BaseTableDataType>(tableProps: {
                 No data found!
               </td>
             </tr>
-          ) : (
-            tableBodyElements
           )}
+          {!tableProps.isLoading &&
+            tableBodyElements.length > 0 &&
+            tableBodyElements}
         </tbody>
       </Table>
     </div>

@@ -19,7 +19,7 @@ import { Button, Dropdown, Form } from "react-bootstrap";
 import Swal from "sweetalert2";
 import UpdateUserDto from "../../../dtos/auth/UpdateUserDto";
 import { getRoleNameByRoleNumber, Role } from "../../../dtos/auth/Role";
-import CategoryDto from "../../../dtos/categories/CategoryDto";
+import CategoryDto from "../../../dtos/category/CategoryDto";
 import { url } from "inspector";
 
 interface FormType {
@@ -113,10 +113,10 @@ export default function UpdateCategory() {
       setError("Title is required");
       return;
     }
-    if (!form.image) {
-      setError("Image is required");
-      return;
-    }
+    // if (!form.image) {
+    //   setError("Image is required");
+    //   return;
+    // }
 
     try {
       setLoading(true);

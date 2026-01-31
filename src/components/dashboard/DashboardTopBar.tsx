@@ -88,7 +88,7 @@ export default function DashboardNavbar() {
       </div>
 
       <DropdownButton
-        className="me-3 rounded"
+        className="me-4 rounded"
         id="dropdown-basic-button"
         title={user?.name.split(" ")[0]}
       >
