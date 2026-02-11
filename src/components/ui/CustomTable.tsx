@@ -4,9 +4,11 @@ import {
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Button, Table } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Button, Form, Table } from "react-bootstrap";
+import { data, Link } from "react-router-dom";
 import Loading from "./loading/Loading";
+import { Dispatch, SetStateAction, useState } from "react";
+import { formatDate } from "../../helper/helper";
 
 //table header
 export interface TableHeaderType {
@@ -23,6 +25,7 @@ export interface BaseTableDataType {
   updatePath: string;
   [key: string]: any; //Index Signature => يمكن فهرسته باستخدام string
   isImage?: boolean;
+  isImages?: boolean;
 }
 
 export default function CustomTable<T extends BaseTableDataType>(tableProps: {
@@ -31,10 +34,24 @@ export default function CustomTable<T extends BaseTableDataType>(tableProps: {
   tableHeader: TableHeaderType[];
   data: T[];
   isLoading: boolean;
+  handleSearch: (searchQuery: string) => Promise<void>;
+  handelDateSearch?: (dateString: string) => Promise<void>;
 }) {
+  const [isDeleteLoading, setIsDeleteLoading] = useState<boolean>(false);
+
   //table header elements
   const tableHeaderElements = tableProps.tableHeader.map((item) => (
-    <th key={item.key}>{item.name}</th>
+    <th
+      className="border-0"
+      style={{
+        backgroundColor: "inherit",
+        color: "inherit",
+        border: "inherit",
+      }}
+      key={item.key}
+    >
+      {item.name}
+    </th>
   ));
 
   //table body elements
@@ -65,6 +82,48 @@ export default function CustomTable<T extends BaseTableDataType>(tableProps: {
             );
           }
 
+          //check if images
+          if (
+            item.isImages &&
+            headerItem.key === "images" &&
+            item["imageUrls"].length >= 1
+          ) {
+            return (
+              <td key={headerItem.key}>
+                <div className="d-flex align-items-center gap-2">
+                  {item["imageUrls"]
+                    .slice(0, 2)
+                    .map((image: string, index: number) => (
+                      <div
+                        key={index}
+                        style={{
+                          width: "100px",
+                          height: "50px",
+                          backgroundImage: `url(${image})`,
+                          backgroundRepeat: "no-repeat",
+                          backgroundPosition: "top",
+                          backgroundSize: "contain",
+                        }}
+                      ></div>
+                    ))}
+                </div>
+              </td>
+            );
+          }
+
+          //check if date
+          if (
+            headerItem.key === "created_at" ||
+            headerItem.key === "updated_at"
+          ) {
+            return (
+              <td key={headerItem.key}>{formatDate(item[headerItem.key])}</td>
+            );
+          }
+
+          //skip images and image columns
+          if (headerItem.key === "images" || headerItem.key === "image") return;
+
           return <td key={headerItem.key}>{item[headerItem.key]}</td>;
         })}
         <td>
@@ -78,10 +137,18 @@ export default function CustomTable<T extends BaseTableDataType>(tableProps: {
             {item.showDeleteButton && (
               <Button
                 className="btn-danger rounded px-4 py-2 d-flex justify-content-center align-items-center gap-1"
-                onClick={() => item.onDelete?.(item.id)}
+                onClick={() => {
+                  item.onDelete?.(item.id);
+                }}
               >
-                <FontAwesomeIcon size="lg" icon={faTrash} />{" "}
-                <p className="p-0 m-0">Delete</p>
+                {isDeleteLoading ? (
+                  <Loading />
+                ) : (
+                  <>
+                    <FontAwesomeIcon size="lg" icon={faTrash} />
+                    <p className="p-0 m-0">Delete</p>
+                  </>
+                )}
               </Button>
             )}
           </div>
@@ -96,21 +163,58 @@ export default function CustomTable<T extends BaseTableDataType>(tableProps: {
     <div className="Users">
       <div className="d-flex align-items-center justify-content-between mb-3">
         <h2 className="text-dark fw-bold fs-1 mb-3 ">{tableProps.tableName}</h2>
-        <Link to={tableProps.addPath}>
-          <Button className="btn-primary rounded px-4 py-2 d-flex justify-content-center align-items-center gap-1">
-            <FontAwesomeIcon size="lg" icon={faPlus} />
-            <p className="p-0 m-0">Add</p>
-          </Button>
-        </Link>
+        <div className="d-flex align-items-center gap-4">
+          <Form.Control
+            type="search"
+            placeholder="Search"
+            onChange={(e) => tableProps.handleSearch(e.target.value)}
+          />
+          <Form.Control
+            type="date"
+            placeholder="Search"
+            onChange={(e) => tableProps.handelDateSearch?.(e.target.value)}
+          />
+          <Link to={tableProps.addPath}>
+            <Button className="btn-primary rounded px-4 py-2 d-flex justify-content-center align-items-center gap-1">
+              <FontAwesomeIcon size="lg" icon={faPlus} />
+              <p className="p-0 m-0">Add</p>
+            </Button>
+          </Link>
+        </div>
       </div>
-      <Table striped bordered hover variant="light" responsive>
-        <thead>
-          <tr>
+      <Table
+        striped
+        bordered
+        hover
+        variant="light"
+        responsive
+        className="table-hover rounded-2 overflow-hidden"
+      >
+        <thead
+          style={{
+            fontSize: "15px",
+          }}
+        >
+          <tr
+            style={{
+              backgroundColor: "#36314e",
+              border: "0",
+              color: "white",
+            }}
+          >
             {tableHeaderElements}
-            <th>Actions</th>
+            <th
+              style={{
+                backgroundColor: "inherit",
+                color: "inherit",
+                border: "inherit",
+              }}
+            >
+              Actions
+            </th>
           </tr>
         </thead>
-        <tbody className="border">
+        <tbody className="rounded-2">
           {tableProps.isLoading && (
             <tr>
               <td colSpan={tableHeaderElements.length + 1}>

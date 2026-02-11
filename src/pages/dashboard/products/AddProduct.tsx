@@ -286,7 +286,6 @@ export default function AddProduct() {
     const imageId = imageIds.current[index];
     const isFound = imageId > 0;
 
-
     const sizeKB = image.size / 1024;
     const sizeMB = sizeKB / 1024;
     return (

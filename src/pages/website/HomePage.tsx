@@ -1,9 +1,10 @@
 import React from "react";
+import Landing from "./landing/landing";
 
 export default function HomePage() {
   return (
-    <div className="h-screen">
-      <h1>HomePage</h1>
-    </div>
+    <>
+      <Landing />
+    </>
   );
 }

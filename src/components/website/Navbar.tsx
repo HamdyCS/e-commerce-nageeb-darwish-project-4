@@ -1,11 +1,44 @@
+import { FormEvent, useEffect, useState } from "react";
+import { Form } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import NavbarBoot from "react-bootstrap/Navbar";
 import { Link, useNavigate } from "react-router-dom";
 import { getAsync } from "../../services/apiService";
 import { getFromCookie, removeFromCookie } from "../../services/cookieService";
+import {
+  faCartShopping,
+  faCircleUser,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import CategoryDto from "../../dtos/category/CategoryDto";
+import Axios from "../../Apis/Axios";
+import { CATEGORIES } from "../../Apis/Apis";
+import { stringSlice } from "../../helper/helper";
 
 export default function Navbar() {
+  const [categories, setCategories] = useState<CategoryDto[]>([]);
+
   const navigate = useNavigate();
+  const token = getFromCookie("BearerToken");
+
+  //get categories
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const data = await Axios.get<CategoryDto[]>(CATEGORIES).then(
+          (res) => res.data,
+        );
+
+        const sliceData = data.slice(0, 5);
+
+        setCategories(sliceData);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    fetchData();
+  }, []);
 
   //handle logout
   async function handelLogout() {
@@ -22,18 +55,92 @@ export default function Navbar() {
     }
   }
 
-  return (
-    <NavbarBoot className="bg-primary p-3 ">
-      <div className="container flex justify-content-between align-items-center">
-        <Link to="/" className="text-black fs-3 fw-bold">
-          E-commerce
-        </Link>
+  //handle search
+  async function handelSubmit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+  }
 
-        <Link to="/login" className="text-decoration-none">
-          <Button type="submit" className="btn-info">
-            Login
-          </Button>
+  const categoryElements = categories.map((category) => (
+    <Link
+      key={category.id}
+      to={`/categories/${category.id}`}
+      className="text-black text-decoration-none"
+    >
+      {stringSlice(category.title)}
+    </Link>
+  ));
+  return (
+    <NavbarBoot className="bg-light p-3 d-block">
+      <div className="container flex flex-wrap justify-content-between align-items-center">
+        <Link
+          to="/"
+          className="text-black fs-3 fw-bold text-decoration-none position-relative"
+        >
+          <img
+            src={require("../../assets/images/logo.png")}
+            alt="logo"
+            style={{
+              width: "200px",
+              height: "200px",
+              objectFit: "contain",
+              position: "absolute",
+              top: "-70px",
+              left: "-50%",
+              zIndex: 1,
+              opacity: 0.3,
+            }}
+          />
+
+          <div className="" style={{ zIndex: 2 }}>
+            <p className="m-0">E-commerce</p>
+            <p
+              className="fw-normal m-0"
+              style={{ fontSize: "15px", color: "gray" }}
+            >
+              By Hamdy Khaled
+            </p>
+          </div>
         </Link>
+        <Form
+          onSubmit={handelSubmit}
+          className="d-flex align-items-center w-50 order-1 order-lg-0 mt-4 mt-lg-0 "
+        >
+          <Form.Control type="search" placeholder="Search" className="w-100" />
+          <Button type="submit" className="btn-info">
+            Search
+          </Button>
+        </Form>
+
+        {!token && (
+          <Link to="/login" className="text-decoration-none">
+            <Button type="submit" className="btn-info">
+              Login
+            </Button>
+          </Link>
+        )}
+        {token && (
+          <div className="d-flex align-items-center gap-2 text-decoration-none ">
+            <Link to={"/"}>
+              <FontAwesomeIcon icon={faCartShopping} size="xl" />
+            </Link>
+            <Link to={"/"}>
+              <FontAwesomeIcon icon={faCircleUser} size="xl" />
+            </Link>
+          </div>
+        )}
+      </div>
+      <div
+        className="mt-4 d-flex flex-wrap gap-5 align-items-center  container position-relative"
+        style={{
+          zIndex: 10,
+        }}
+      >
+        {categoryElements}
+        {categoryElements.length > 0 && (
+          <Link to="/categories" className="text-black text-decoration-none">
+            All
+          </Link>
+        )}
       </div>
     </NavbarBoot>
   );

@@ -1,5 +1,11 @@
-import { useEffect, useState } from "react";
-import { ALL_USERS, DELETE_USER, GET_AUTH_USER } from "../../../Apis/Apis";
+import { ChangeEvent, useEffect, useState } from "react";
+import {
+  ALL_USERS,
+  COUNT_USERS,
+  DELETE_USER,
+  GET_AUTH_USER,
+  SEARCH_USERS,
+} from "../../../Apis/Apis";
 import Axios from "../../../Apis/Axios";
 import CustomTable, {
   BaseTableDataType,
@@ -7,6 +13,9 @@ import CustomTable, {
 } from "../../../components/ui/CustomTable";
 import { getRoleNameByRoleNumber } from "../../../dtos/auth/Role";
 import UserDto from "../../../dtos/auth/UserDto";
+import { Default_PAGE_SIZE } from "../../../config";
+import Pagination from "../../../components/ui/pagination/Pagination";
+import { formatDate } from "../../../helper/helper";
 
 //لازم يرث ال BaseTableDataType => اللي انا عاملها
 //اللي فيها ال property الزيادة
@@ -20,21 +29,40 @@ export default function Users() {
   const [counter, setCounter] = useState<number>(0);
   const [authUser, setAuthUser] = useState<UserDto>({} as UserDto);
 
+  //search state
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [dateQuery, setDateQuery] = useState<string>("");
+
+  //pagination states
+  const [pageSize, setPageSize] = useState<number>(Default_PAGE_SIZE);
+  const [countOfItems, setCountOfItems] = useState<number>(0);
+  const [currentPageNumber, setCurrentPageNumber] = useState<number>(1);
+
   //get users
   useEffect(() => {
     async function fetchData() {
       try {
-        //fetch users from api
-        const data = await Axios.get<UserDto[]>(ALL_USERS).then(
-          (res) => res.data,
-        );
+        !loading && setLoading(true);
 
-        data && setUsers(data);
+        //fetch users from api
+        const data: UserDto[] = await Axios.get(
+          `${ALL_USERS}?limit=${pageSize}&page=${currentPageNumber}`,
+        ).then((res) => res.data.data);
+
+        if (!countOfItems) {
+          //call api to get categories count
+          const count: number = await Axios.get(`${COUNT_USERS}`).then(
+            (res) => res.data.count,
+          );
+          count && setCountOfItems(count);
+        }
 
         //get auth user
         const user = await Axios.get<UserDto>(`${GET_AUTH_USER}`).then(
           (res) => res.data,
         );
+
+        data && setUsers(data);
 
         user && setAuthUser(user);
       } catch (error) {
@@ -45,7 +73,81 @@ export default function Users() {
     }
 
     fetchData();
-  }, [counter]);
+  }, [counter, currentPageNumber, pageSize]);
+
+  //search users
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        setLoading(true);
+
+        //if search query is empty
+        if (!searchQuery) {
+          setCounter((prev) => prev + 1);
+          return;
+        }
+
+        //call api to search categories
+        const data = await Axios.post<UserDto[]>(
+          `${SEARCH_USERS}?title=${searchQuery}`,
+        ).then((res) => res.data);
+
+        setUsers(data);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    const timer1 = setTimeout(() => {
+      fetchData();
+    }, 500);
+
+    return () => clearTimeout(timer1);
+  }, [searchQuery]);
+
+  //search by date
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        setLoading(true);
+
+        //if search query is empty
+        if (!dateQuery) {
+          setCounter((prev) => prev + 1);
+          return;
+        }
+
+        //call api to search categories
+        const data: UserDto[] = await Axios.get(ALL_USERS).then(
+          (res) => res.data.data,
+        );
+
+        const filterData = data.filter(
+          (user) => formatDate(user.created_at) === formatDate(dateQuery),
+        );
+
+        setUsers(filterData);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchData();
+  }, [dateQuery]);
+
+  //handel search
+  async function handleSearch(searchQuery: string) {
+    setSearchQuery(searchQuery);
+  }
+
+  //handel date search
+  async function handelDateSearch(dateString: string) {
+    setDateQuery(dateString);
+  }
 
   //delete user
   async function handelDelete(id: number) {
@@ -116,7 +218,18 @@ export default function Users() {
         tableName="Users"
         addPath="/dashboard/users/add"
         isLoading={loading}
+        handleSearch={handleSearch}
+        handelDateSearch={handelDateSearch}
       />
+      {!searchQuery && (
+        <Pagination
+          setCurrentPageNumber={setCurrentPageNumber}
+          pageNumber={currentPageNumber}
+          countOfItems={countOfItems}
+          pageSize={pageSize}
+          setPageSize={setPageSize}
+        />
+      )}
     </div>
   );
 }

@@ -89,7 +89,7 @@ export default function AddUser() {
     }
 
     //validition role
-    if (isEnRole(form.role)) {
+    if (!isEnRole(form.role)) {
       setError("Please select role");
       return;
     }

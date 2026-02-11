@@ -1,22 +1,22 @@
-import "./Dashboard.css";
 import { useAtom } from "jotai";
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import { showDashboardSidebarAtom } from "../../atoms/DashBoardAtom";
 import { windowSizeAtom } from "../../atoms/WindowAtom";
 import DashboardSidebar from "../../components/dashboard/DashboardSideBar";
 import DashboardTopBar from "../../components/dashboard/DashboardTopBar";
-import NotFound from "../website/errors/NotFound";
+import { enRole } from "../../dtos/auth/Role";
 import ForbiddenPage from "../website/auth/errors/ForbiddenPage";
+import NotFound from "../website/errors/NotFound";
+import AddCategory from "./categories/AddCategory";
+import Categories from "./categories/Categories";
+import UpdateCategory from "./categories/UpdateCategory";
+import "./Dashboard.css";
+import AddProduct from "./products/AddProduct";
+import Products from "./products/Products";
+import RequireCustomAuthDashboard from "./protecting/RequireCustomAuthDashboard";
 import AddUser from "./users/AddUser";
 import UpdateUser from "./users/UpdateUser";
 import Users from "./users/Users";
-import { enRole } from "../../dtos/auth/Role";
-import RequireCustomAuthDashboard from "./protecting/RequireCustomAuthDashboard";
-import Categories from "./categories/Categories";
-import AddCategory from "./categories/AddCategory";
-import UpdateCategory from "./categories/UpdateCategory";
-import Products from "./products/Products";
-import AddProduct from "./products/AddProduct";
 import UpdateProduct from "./products/UpdateProduct";
 
 export default function Dashboard() {

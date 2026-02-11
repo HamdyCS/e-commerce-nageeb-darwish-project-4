@@ -15,6 +15,9 @@ import HomePage from "./pages/website/HomePage";
 import { enRole } from "./dtos/auth/Role";
 import RequireCustomAuth from "./pages/website/auth/protecting/RequireCustomAuth";
 import RequireBack from "./pages/website/auth/protecting/RequireBack";
+import "./customSass.css";
+import CategoriesWebsite from "./pages/website/categories/CategoriesWebsite";
+import Category from "./pages/website/categories/Category";
 
 function App() {
   const [windowSize, setWindowSize] = useAtom(windowSizeAtom);
@@ -40,8 +43,11 @@ function App() {
     >
       <Routes>
         <Route element={<Layout />}>
+          {/* public routes */}
           <Route path="/" element={<HomePage />} />
           <Route path="/home" element={<HomePage />} />
+          <Route path="/categories" element={<CategoriesWebsite />} />
+          <Route path="/categories/:id" element={<Category />} />
 
           <Route element={<RequireBack />}>
             <Route path="/register" element={<Register />} />
@@ -52,7 +58,6 @@ function App() {
             path="/auth/google/callback"
             element={<GoogleCallbackPage />}
           />
-          <Route path="*" element={<NotFound />} />
           {/* protected routes */}
           <Route element={<RequireAuth />}>
             {/* Require custom auth */}
@@ -66,6 +71,8 @@ function App() {
               <Route path="/dashboard/*" element={<Dashboard />} />
             </Route>
           </Route>
+
+          <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>
     </div>
