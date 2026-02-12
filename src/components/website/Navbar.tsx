@@ -14,9 +14,11 @@ import CategoryDto from "../../dtos/category/CategoryDto";
 import Axios from "../../Apis/Axios";
 import { CATEGORIES } from "../../Apis/Apis";
 import { stringSlice } from "../../helper/helper";
+import Skeleton from "react-loading-skeleton";
 
 export default function Navbar() {
   const [categories, setCategories] = useState<CategoryDto[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const navigate = useNavigate();
   const token = getFromCookie("BearerToken");
@@ -32,8 +34,11 @@ export default function Navbar() {
         const sliceData = data.slice(0, 5);
 
         setCategories(sliceData);
+        setIsLoading(false);
       } catch (error) {
         console.log(error);
+      } finally {
+        setIsLoading(false);
       }
     }
 
@@ -61,14 +66,28 @@ export default function Navbar() {
   }
 
   const categoryElements = categories.map((category) => (
-    <Link
-      key={category.id}
-      to={`/categories/${category.id}`}
-      className="text-black text-decoration-none"
-    >
-      {stringSlice(category.title)}
-    </Link>
+    <div key={category.id}>
+      <Link
+        to={`/categories/${category.id}`}
+        className="text-black text-decoration-none"
+      >
+        {stringSlice(category.title)}
+      </Link>
+    </div>
   ));
+
+  categoryElements.push(
+    <div key={categoryElements.length}>
+      <Link to="/categories" className="text-black text-decoration-none">
+        All
+      </Link>
+    </div>,
+  );
+
+  const skeletonElements = Array.from({ length: 6 }).map((_, index) => (
+    <Skeleton key={index} width="116.016px" height="30px" />
+  ));
+
   return (
     <NavbarBoot className="bg-light p-3 d-block">
       <div className="container flex flex-wrap justify-content-between align-items-center">
@@ -135,12 +154,7 @@ export default function Navbar() {
           zIndex: 10,
         }}
       >
-        {categoryElements}
-        {categoryElements.length > 0 && (
-          <Link to="/categories" className="text-black text-decoration-none">
-            All
-          </Link>
-        )}
+        {isLoading ? skeletonElements : categoryElements}
       </div>
     </NavbarBoot>
   );

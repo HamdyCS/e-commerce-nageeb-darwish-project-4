@@ -18,6 +18,7 @@ import RequireBack from "./pages/website/auth/protecting/RequireBack";
 import "./customSass.css";
 import CategoriesWebsite from "./pages/website/categories/CategoriesWebsite";
 import Category from "./pages/website/categories/Category";
+import Product from "./pages/website/products/Product";
 
 function App() {
   const [windowSize, setWindowSize] = useAtom(windowSizeAtom);
@@ -46,9 +47,15 @@ function App() {
           {/* public routes */}
           <Route path="/" element={<HomePage />} />
           <Route path="/home" element={<HomePage />} />
+
+          {/* categories */}
           <Route path="/categories" element={<CategoriesWebsite />} />
           <Route path="/categories/:id" element={<Category />} />
 
+          {/* products */}
+          <Route path="/products/:id" element={<Product />} />
+
+          {/* auth */}
           <Route element={<RequireBack />}>
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<LoginPage />} />
@@ -72,6 +79,7 @@ function App() {
             </Route>
           </Route>
 
+          {/* errors */}
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>

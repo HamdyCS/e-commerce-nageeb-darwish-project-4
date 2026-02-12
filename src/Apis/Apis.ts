@@ -31,6 +31,8 @@ export const ADD_PRODUCT = "product/add";
 export const DELETE_PRODUCT = (id: number) => `product/${id}`;
 export const UPDATE_PRODUCT = (id: number) => `product/edit/${id}`;
 export const LATEST_SALE_PRODUCTS = "latest-sale";
+export const TOP_RATING_PRODUCTS = "top-rated";
+export const LATEST_PRODUCTS = "latest";
 
 //product images
 export const ADD_PRODUCT_IMAGE = "product-img/add";
