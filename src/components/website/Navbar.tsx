@@ -124,7 +124,11 @@ export default function Navbar() {
           onSubmit={handelSubmit}
           className="d-flex align-items-center w-50 order-1 order-lg-0 mt-4 mt-lg-0 "
         >
-          <Form.Control type="search" placeholder="Search" className="w-100" />
+          <Form.Control
+            type="search"
+            placeholder="Search product"
+            className="w-100"
+          />
           <Button type="submit" className="btn-info">
             Search
           </Button>

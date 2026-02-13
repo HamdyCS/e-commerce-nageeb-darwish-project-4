@@ -44,24 +44,18 @@ export default function Products() {
         !loading && setLoading(true);
 
         //call api to get products
-        const data: ProductDto[] = await Axios.get(
+        const data: { data: ProductDto[]; total: number } = await Axios.get(
           `${PRODUCTS}?limit=${pageSize}&page=${currentPageNumber}`,
-        ).then((res) => res.data.data);
+        ).then((res) => res.data);
 
-        const dataWithImageUrls: ProductDto[] = data.map((item) => {
+        const dataWithImageUrls: ProductDto[] = data.data.map((item) => {
           return {
             ...item,
             imageUrls: item.images.map((image) => image.image),
           };
         });
 
-        if (!countOfItems) {
-          //call api to get categories count
-          const count: number = await Axios.get(`${COUNT_PRODUCTS}`).then(
-            (res) => res.data.count,
-          );
-          count && setCountOfItems(count);
-        }
+        setCountOfItems(data.total);
 
         setProducts(dataWithImageUrls);
       } catch (err) {

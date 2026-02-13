@@ -45,24 +45,19 @@ export default function Users() {
         !loading && setLoading(true);
 
         //fetch users from api
-        const data: UserDto[] = await Axios.get(
+        const data: { data: UserDto[]; total: number } = await Axios.get(
           `${ALL_USERS}?limit=${pageSize}&page=${currentPageNumber}`,
-        ).then((res) => res.data.data);
+        ).then((res) => res.data);
 
-        if (!countOfItems) {
-          //call api to get categories count
-          const count: number = await Axios.get(`${COUNT_USERS}`).then(
-            (res) => res.data.count,
-          );
-          count && setCountOfItems(count);
-        }
+
+        setCountOfItems(data.total);
 
         //get auth user
         const user = await Axios.get<UserDto>(`${GET_AUTH_USER}`).then(
           (res) => res.data,
         );
 
-        data && setUsers(data);
+        data && setUsers(data.data);
 
         user && setAuthUser(user);
       } catch (error) {

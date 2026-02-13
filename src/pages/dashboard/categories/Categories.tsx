@@ -40,19 +40,13 @@ export default function Categories() {
         !loading && setLoading(true);
 
         //call api to get categories
-        const data: CategoryDto[] = await Axios.get(
+        const data: { data: CategoryDto[]; total: number } = await Axios.get(
           `${CATEGORIES}?limit=${pageSize}&page=${currentPageNumber}`,
-        ).then((res) => res.data.data);
+        ).then((res) => res.data);
 
-        if (!countOfItems) {
-          //call api to get categories count
-          const count: number = await Axios.get(`${COUNT_CATEGORIES}`).then(
-            (res) => res.data.count,
-          );
-          count && setCountOfItems(count);
-        }
+        setCountOfItems(data.total);
 
-        data && setCategories(data);
+        data && setCategories(data.data);
       } catch (err) {
         console.log(err);
       } finally {
