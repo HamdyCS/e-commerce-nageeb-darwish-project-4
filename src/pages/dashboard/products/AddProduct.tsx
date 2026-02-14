@@ -111,6 +111,7 @@ export default function AddProduct() {
         discount: 0,
         About: "About",
         category: newForm.category,
+        stock: 0,
       };
 
       const data = await Axios.post<ProductDto>(
@@ -234,16 +235,20 @@ export default function AddProduct() {
       setError("Description is required");
       return;
     }
-    if (!form.price) {
-      setError("Price is required");
+    if (form.price <= 0) {
+      setError("Price must be greater than 0");
       return;
     }
-    if (!form.discount) {
-      setError("Discount is required");
+    if (form.discount < 0) {
+      setError("Discount must be greater than or equal to 0");
       return;
     }
     if (!form.About) {
       setError("About is required");
+      return;
+    }
+    if (form.stock <= 0) {
+      setError("Stock must be greater than 0");
       return;
     }
     if (images.length === 0) {
@@ -432,6 +437,17 @@ export default function AddProduct() {
                 placeholder="About..."
                 onChange={handelFormChange}
                 value={form.About}
+              />
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="stock">
+              <Form.Label>Stock</Form.Label>
+              <Form.Control
+                disabled={newProductId === 0}
+                type="number"
+                name="stock"
+                placeholder="stock..."
+                onChange={handelFormChange}
+                value={form.stock}
               />
             </Form.Group>
             <Form.Group className="mb-3" controlId="images">

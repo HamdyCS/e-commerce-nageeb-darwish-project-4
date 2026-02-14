@@ -1,5 +1,4 @@
-export default interface ProductInCart {
-  productId: number;
+export default interface ProductInCartDto {
+  product_id: number;
   count: number;
 }
-

@@ -5,4 +5,5 @@ export default interface AddEditProductDto {
   discount: number;
   About: string;
   category: number;
+  stock: number;
 }

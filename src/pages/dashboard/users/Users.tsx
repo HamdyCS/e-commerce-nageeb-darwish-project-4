@@ -1,7 +1,6 @@
-import { ChangeEvent, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   ALL_USERS,
-  COUNT_USERS,
   DELETE_USER,
   GET_AUTH_USER,
   SEARCH_USERS,
@@ -11,10 +10,10 @@ import CustomTable, {
   BaseTableDataType,
   TableHeaderType,
 } from "../../../components/ui/CustomTable";
+import Pagination from "../../../components/ui/pagination/Pagination";
+import { Default_PAGE_SIZE } from "../../../config";
 import { getRoleNameByRoleNumber } from "../../../dtos/auth/Role";
 import UserDto from "../../../dtos/auth/UserDto";
-import { Default_PAGE_SIZE } from "../../../config";
-import Pagination from "../../../components/ui/pagination/Pagination";
 import { formatDate } from "../../../helper/helper";
 
 //لازم يرث ال BaseTableDataType => اللي انا عاملها
@@ -48,7 +47,6 @@ export default function Users() {
         const data: { data: UserDto[]; total: number } = await Axios.get(
           `${ALL_USERS}?limit=${pageSize}&page=${currentPageNumber}`,
         ).then((res) => res.data);
-
 
         setCountOfItems(data.total);
 

@@ -1,5 +1,5 @@
 import { FormEvent, useEffect, useState } from "react";
-import { Form } from "react-bootstrap";
+import { Form, Modal } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import NavbarBoot from "react-bootstrap/Navbar";
 import { Link, useNavigate } from "react-router-dom";
@@ -15,10 +15,13 @@ import Axios from "../../Apis/Axios";
 import { CATEGORIES } from "../../Apis/Apis";
 import { stringSlice } from "../../helper/helper";
 import Skeleton from "react-loading-skeleton";
+import CartModal from "../../pages/website/cart/CartModal";
 
 export default function Navbar() {
   const [categories, setCategories] = useState<CategoryDto[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+
+  const [show, setShow] = useState(false);
 
   const navigate = useNavigate();
   const token = getFromCookie("BearerToken");
@@ -84,13 +87,17 @@ export default function Navbar() {
     </div>,
   );
 
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
   const skeletonElements = Array.from({ length: 6 }).map((_, index) => (
     <Skeleton key={index} width="116.016px" height="30px" />
   ));
 
   return (
     <NavbarBoot className="bg-light p-3 d-block">
-      <div className="container flex flex-wrap justify-content-between align-items-center">
+      {show && <CartModal onClose={handleClose} />}
+      <div className="container d-flex flex-wrap justify-content-between align-items-center">
         <Link
           to="/"
           className="text-black fs-3 fw-bold text-decoration-none position-relative"
@@ -122,7 +129,7 @@ export default function Navbar() {
         </Link>
         <Form
           onSubmit={handelSubmit}
-          className="d-flex align-items-center w-50 order-1 order-lg-0 mt-4 mt-lg-0 "
+          className="d-flex align-items-center w-50 order-2 order-md-1 mt-3 mt-md-0"
         >
           <Form.Control
             type="search"
@@ -133,24 +140,29 @@ export default function Navbar() {
             Search
           </Button>
         </Form>
-
-        {!token && (
-          <Link to="/login" className="text-decoration-none">
-            <Button type="submit" className="btn-info">
-              Login
-            </Button>
-          </Link>
-        )}
-        {token && (
-          <div className="d-flex align-items-center gap-2 text-decoration-none ">
-            <Link to={"/"}>
-              <FontAwesomeIcon icon={faCartShopping} size="xl" />
+        <div className="order-1 order-md-2">
+          {!token && (
+            <Link to="/login" className="text-decoration-none">
+              <Button type="submit" className="btn-info">
+                Login
+              </Button>
             </Link>
-            <Link to={"/"}>
-              <FontAwesomeIcon icon={faCircleUser} size="xl" />
-            </Link>
-          </div>
-        )}
+          )}
+          {token && (
+            <div className="d-flex align-items-center gap-2 text-decoration-none ">
+              <Link to={"/"}>
+                <FontAwesomeIcon
+                  onClick={handleShow}
+                  icon={faCartShopping}
+                  size="xl"
+                />
+              </Link>
+              <Link to={"/"}>
+                <FontAwesomeIcon icon={faCircleUser} size="xl" />
+              </Link>
+            </div>
+          )}
+        </div>
       </div>
       <div
         className="mt-4 d-flex flex-wrap gap-5 align-items-center  container position-relative"

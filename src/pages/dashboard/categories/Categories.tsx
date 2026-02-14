@@ -2,9 +2,8 @@ import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import {
   CATEGORIES,
-  COUNT_CATEGORIES,
   DELETE_CATEGORY,
-  SEARCH_CATEGORIES,
+  SEARCH_CATEGORIES
 } from "../../../Apis/Apis";
 import Axios from "../../../Apis/Axios";
 import CustomTable, {

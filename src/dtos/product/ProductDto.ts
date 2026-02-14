@@ -9,6 +9,7 @@ export default interface ProductDto {
   About: string;
   category: number;
   rating: number;
+  stock: number;
   images: ProuductImageDto[];
   imageUrls?: string[];
   created_at: string;

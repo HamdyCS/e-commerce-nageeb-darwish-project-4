@@ -218,9 +218,9 @@ export default function UpdateProduct() {
   function handelFormChange(e: ChangeEvent<HTMLInputElement>) {
     setError("");
 
-    const newForm = { ...product, [e.target.name]: e.target.value };
+    const newProduct = { ...product, [e.target.name]: e.target.value };
 
-    setProduct(newForm);
+    setProduct(newProduct);
   }
 
   //handel submit (edit product)
@@ -244,16 +244,20 @@ export default function UpdateProduct() {
       setError("Description is required");
       return;
     }
-    if (!product.price) {
-      setError("Price is required");
+    if (product.price <= 0) {
+      setError("Price must be greater than 0");
       return;
     }
-    if (!product.discount) {
-      setError("Discount is required");
+    if (product.discount < 0) {
+      setError("Discount must be greater than or equal to 0");
       return;
     }
     if (!product.About) {
       setError("About is required");
+      return;
+    }
+    if (product.stock <= 0) {
+      setError("Stock must be greater than 0");
       return;
     }
 
@@ -482,6 +486,16 @@ export default function UpdateProduct() {
                 placeholder="About..."
                 onChange={handelFormChange}
                 value={product.About}
+              />
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="stock">
+              <Form.Label>Stock</Form.Label>
+              <Form.Control
+                type="number"
+                name="stock"
+                placeholder="stock..."
+                onChange={handelFormChange}
+                value={product.stock}
               />
             </Form.Group>
             <Form.Group className="mb-3" controlId="images">

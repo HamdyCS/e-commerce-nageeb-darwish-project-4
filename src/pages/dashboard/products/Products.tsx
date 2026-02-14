@@ -1,22 +1,14 @@
-import { ChangeEvent, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
-import {
-  CATEGORIES,
-  COUNT_PRODUCTS,
-  DELETE_CATEGORY,
-  DELETE_PRODUCT,
-  PRODUCTS,
-  SEARCH_PRODUCTS,
-} from "../../../Apis/Apis";
+import { DELETE_PRODUCT, PRODUCTS, SEARCH_PRODUCTS } from "../../../Apis/Apis";
 import Axios from "../../../Apis/Axios";
 import CustomTable, {
   BaseTableDataType,
   TableHeaderType,
 } from "../../../components/ui/CustomTable";
-import CategoryDto from "../../../dtos/category/CategoryDto";
-import ProductDto from "../../../dtos/product/ProductDto";
-import { Default_PAGE_SIZE } from "../../../config";
 import Pagination from "../../../components/ui/pagination/Pagination";
+import { Default_PAGE_SIZE } from "../../../config";
+import ProductDto from "../../../dtos/product/ProductDto";
 import { formatDate } from "../../../helper/helper";
 
 interface TableDataType extends ProductDto, BaseTableDataType {}
@@ -210,6 +202,7 @@ export default function Products() {
     { name: "Price", key: "price" },
     { name: "Discount", key: "discount" },
     { name: "About", key: "About" },
+    { name: "Stock", key: "stock" },
     { name: "Category", key: "category" },
     { name: "Rating", key: "rating" },
     { name: "Created At", key: "created_at" },

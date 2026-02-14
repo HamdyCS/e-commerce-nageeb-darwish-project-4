@@ -1,31 +1,27 @@
-import {
-  JSXElementConstructor,
-  ReactElement,
-  ReactNode,
-  ReactPortal,
-  useEffect,
-  useState,
-} from "react";
-import ImageGallery, { GalleryItem } from "react-image-gallery";
-import { useParams } from "react-router-dom";
-import ProductDto from "../../../dtos/product/ProductDto";
-import ProductInCart from "../../../dtos/product/ProductInCart";
-import { Col, Row } from "react-bootstrap";
-import Axios from "../../../Apis/Axios";
-import { GET_PRODUCT, TOP_RATING_PRODUCTS } from "../../../Apis/Apis";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar as faStarReguiler } from "@fortawesome/free-regular-svg-icons";
 import {
   faCartShopping,
   faStar as faStarSolid,
 } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useEffect, useState } from "react";
+import { Col, Row } from "react-bootstrap";
+import ImageGallery, { GalleryItem } from "react-image-gallery";
 import Skeleton from "react-loading-skeleton";
+import { useParams } from "react-router-dom";
+import { GET_PRODUCT } from "../../../Apis/Apis";
+import Axios from "../../../Apis/Axios";
+import Counter from "../../../components/ui/counter/Counter";
+import ProductDto from "../../../dtos/product/ProductDto";
+import ProductInCartDto from "../../../dtos/product/ProductInCart";
 
 export default function Product() {
   const { id } = useParams();
   const [loading, setLoading] = useState(true);
   const [product, setProduct] = useState<ProductDto>({} as ProductDto);
   const [images, setImages] = useState<GalleryItem[]>([]);
+
+  const [quantity, setQuantity] = useState(1);
 
   let starElements = [];
 
@@ -59,18 +55,27 @@ export default function Product() {
     const item = localStorage.getItem("cart");
 
     //cast item to ProductInCart
-    const cart: ProductInCart[] = item ? JSON.parse(item) : [];
+    const cart: ProductInCartDto[] = item ? JSON.parse(item) : [];
 
     //get product from cart
-    const productInCart = cart.find((item) => item.productId === product.id);
+    const productInCart = cart.find((item) => item.product_id === product.id);
+
+    let updatedCart: ProductInCartDto[];
 
     if (productInCart) {
-      productInCart.count++;
+      //update product in cart
+      updatedCart = cart.map((item) => {
+        if (item.product_id === product.id) {
+          return { ...item, count: quantity };
+        }
+        return item;
+      });
     } else {
-      cart.push({ productId: product.id, count: 1 });
+      //add product to cart
+      updatedCart = [...cart, { product_id: product.id, count: quantity }];
     }
 
-    localStorage.setItem("cart", JSON.stringify(cart));
+    localStorage.setItem("cart", JSON.stringify(updatedCart));
   }
 
   //add stars
@@ -159,13 +164,24 @@ export default function Product() {
                     backgroundColor: "black",
                   }}
                 />
+                <p className="mb-3 text-black-50 fs-5">
+                  There is only {product.stock} left
+                </p>
                 <div className="d-flex align-items-center justify-content-between">
                   <div>{starElements}</div>
-                  <FontAwesomeIcon
-                    onClick={handelAddToCart}
-                    icon={faCartShopping}
-                    cursor="pointer"
-                  />
+                  <div className="d-flex align-items-center gap-3 flex-wrap">
+                    <Counter
+                      min={1}
+                      max={product.stock}
+                      value={quantity}
+                      onChange={(value) => setQuantity(value)}
+                    />
+                    <FontAwesomeIcon
+                      icon={faCartShopping}
+                      cursor="pointer"
+                      onClick={handelAddToCart}
+                    />
+                  </div>
                 </div>
               </div>
             </div>
